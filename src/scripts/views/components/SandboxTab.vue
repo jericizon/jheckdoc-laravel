@@ -242,8 +242,13 @@ export default {
         });
     },
     refreshState() {
+      // console.log('refresh state');
       this.inputHeaders = {};
       this.inputParameters = {};
+      this.isRequesting = false;
+      this.showValidationError = false;
+      this.serverResponseError = '';
+
       if (this.headers) {
         const headers = Object.entries(this.headers);
         for (const [key, header] of headers) {

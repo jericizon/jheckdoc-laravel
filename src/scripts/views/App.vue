@@ -18,12 +18,16 @@ div
         aria-label="menu"
         aria-expanded="false"
         data-target="main-menu"
+        :class="{'is-active' : menuIsActive}"
+        @click="menuIsActive = !menuIsActive"
       )
         span(aria-hidden="true")
         span(aria-hidden="true")
         span(aria-hidden="true")
 
-  #main-wrapper
+  #main-wrapper(
+    :class="{'menu-is-active' : menuIsActive}"
+  )
     div.left-col
       #main-menu.menu
         div(
@@ -128,6 +132,7 @@ export default {
       jheckDocLogo: '',
       activeTab: 'parameters',
       activeMenu: '',
+      menuIsActive: false,
     };
   },
   computed: {
@@ -216,9 +221,10 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
+  box-shadow: 0px -2px 20px #0000006e;
 
   & + div {
-    margin-top: 60px;
+    margin-top: 75px;
   }
 
   .navbar-item{
@@ -243,38 +249,66 @@ export default {
     padding: 10px;
     max-width: 300px;
   }
+
   .right-col {
     max-width: calc(100% - 300px);
     padding: 20px;
   }
+
+  @media screen and (max-width: 1024px){
+    .left-col{
+      display: none;
+      position: absolute;
+      background: rgb(0 0 0 / 0.8);
+      height: 100%;
+      max-width: 100%;
+      z-index: 10;
+    }
+
+    .right-col {
+      max-width: 100%;
+    }
+
+    &.menu-is-active{
+      .left-col{
+        display: block;
+
+        .menu {
+          background: #fff;
+        }
+      }
+    }
+  }
 }
+
+
 #main-menu {
   overflow-y: auto;
   height: 100%;
   position: fixed;
-  top: 70px;
+  top: 78px;
   left: 0;
   width: 300px;
   padding: 10px;
   padding-bottom: 50px;
   border-right: 1px solid #ccc;
 
-    ul {
-        margin-bottom: 50px;
+  ul {
+    margin-bottom: 50px;
 
-        &.no-group{
-            margin-bottom: 10px;
-        }
+    &.no-group{
+      margin-bottom: 10px;
     }
+  }
 
-    li {
-        a {
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-            text-transform: capitalize;
-        }
+  li {
+    a {
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      text-transform: capitalize;
     }
+  }
 }
 
 #main-content {
