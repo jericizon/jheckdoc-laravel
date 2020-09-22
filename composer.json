@@ -1,0 +1,55 @@
+{
+    "name": "jheckdoc/jheckdoc-laravel",
+    "description": "Simplify creating api documentations.",
+    "keywords": [
+        "jheckdoc",
+        "jheckdoc-laravel",
+        "api",
+        "documentation",
+        "laravel"
+    ],
+    "homepage": "https://github.com/jheckdoc/jheckdoc-laravel",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Jeric Izon",
+            "email": "im.jericizon@gmail.com",
+            "role": "Author"
+        }
+    ],
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "JheckDoc\\JheckDocLaravel\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JheckDoc\\JheckDocLaravel\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JheckDoc\\JheckDocLaravel\\JheckdocServiceProvider"
+            ],
+            "aliases": {
+                "JheckDoc": "JheckDoc\\JheckDocLaravel\\JheckdocFacade"
+            }
+        }
+    }
+}
