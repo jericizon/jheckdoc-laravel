@@ -1,24 +1,26 @@
-# Very short description of the package
+# Jheckdoc laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/jheckdoc/jheckdoc.svg?style=flat-square)](https://packagist.org/packages/jheckdoc/jheckdoc)
-[![Build Status](https://img.shields.io/travis/jheckdoc/jheckdoc/master.svg?style=flat-square)](https://travis-ci.org/jheckdoc/jheckdoc)
-[![Quality Score](https://img.shields.io/scrutinizer/g/jheckdoc/jheckdoc.svg?style=flat-square)](https://scrutinizer-ci.com/g/jheckdoc/jheckdoc)
-[![Total Downloads](https://img.shields.io/packagist/dt/jheckdoc/jheckdoc.svg?style=flat-square)](https://packagist.org/packages/jheckdoc/jheckdoc)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/jericizon/jheckdoc-laravel.svg?style=flat-square)](https://packagist.org/packages/jericizon/jheckdoc-laravel)
+[![Build Status](https://img.shields.io/travis/jericizon/jheckdoc-laravel/master.svg?style=flat-square)](https://travis-ci.org/jericizon/jheckdoc-laravel)
+[![Quality Score](https://img.shields.io/scrutinizer/g/jericizon/jheckdoc-laravel.svg?style=flat-square)](https://scrutinizer-ci.com/g/jericizon/jheckdoc-laravel)
+[![Total Downloads](https://img.shields.io/packagist/dt/jericizon/jheckdoc-laravel.svg?style=flat-square)](https://packagist.org/packages/jericizon/jheckdoc-laravel)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+Laravel api document generator
 
 ## Installation
 
-You can install the package via composer:
+You can install the package via composer: - soon
 
 ```bash
-composer require jheckdoc/jheckdoc
+composer require jericizon/jheckdoc-laravel
 ```
 
 ## Usage
 
+Generate json file
 ``` php
 // Usage description here
+php artisan jheckdoc:generate
 ```
 
 ### Testing
@@ -37,7 +39,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ### Security
 
-If you discover any security related issues, please email im.jericizon@gmail.com instead of using the issue tracker.
+If you discover any security related issues, pelase use [issue tracker](../../issues).
 
 ## Credits
 
@@ -47,6 +49,8 @@ If you discover any security related issues, please email im.jericizon@gmail.com
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+Copyright (c) 2020, Jeric
 
 ## Laravel Package Boilerplate
 
