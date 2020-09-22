@@ -28,16 +28,16 @@
         )
           .field-label.is-normal
             label.label {{key}}
-              span.required(v-if="parameters[key].required") &nbsp;*
+              span.required(v-if="isRequired(key)") &nbsp;*
 
           .field-body
             .field
               p.control
                 input.input(
                   v-model="inputParameters[key]"
-                  :class="{'form-incomplete': parameters[key].required && !inputParameters[key], 'is-danger' : parameters[key].required && !inputParameters[key] && showValidationError}"
+                  :class="{'form-incomplete': isRequired(key) && !inputParameters[key], 'is-danger' : isRequired(key) && !inputParameters[key] && showValidationError}"
                 )
-                span.mt-1.tag.is-danger(v-if="parameters[key].required && !inputParameters[key] && showValidationError") This field is required
+                span.mt-1.tag.is-danger(v-if="isRequired(key) && !inputParameters[key] && showValidationError") This field is required
 
     button.button.is-primary(
       @click="executeRequest"
@@ -45,7 +45,14 @@
     ) Execute
 
     template(
-      v-if="hasServerResponse"
+      v-if="serverResponseError"
+    )
+      pre.mt-5(
+        v-html="serverResponseError"
+      )
+
+    template(
+      v-else-if="hasServerResponse"
     )
       hr
       h4.title.is-4 Server response
@@ -95,6 +102,7 @@ export default {
       inputParameters: {},
       isRequesting: false,
       showValidationError: false,
+      serverResponseError: '',
     };
   },
   computed: {
@@ -145,8 +153,13 @@ export default {
 
       return input;
     },
+    isRequired(index) {
+      return !!(typeof this.parameters[index] !== 'undefined' && typeof this.parameters[index].required !== 'undefined' && this.parameters[index].required);
+    },
     executeRequest() {
       // console.log(this.getActiveRouteContent);
+
+      this.serverResponseError = '';
 
       if (document.getElementsByClassName('form-incomplete').length) {
         this.showValidationError = true;
@@ -159,6 +172,8 @@ export default {
       const headers = JSON.parse(JSON.stringify(this.inputHeaders));
       const { method } = this.getActiveRouteContent;
 
+      // console.log(data, headers, method);
+
       this.isRequesting = true;
 
       // clear old value
@@ -169,12 +184,32 @@ export default {
 
       let axiosRequest = '';
 
-      if (method.toLowerCase() === 'post') {
-        axiosRequest = axios.post;
-      } else {
-        axiosRequest = axios;
+      switch (method.toLowerCase()) {
+        case 'delete':
+          axiosRequest = axios.delete(this.activeRoute, data, headers);
+          break;
+        case 'patch':
+          axiosRequest = axios.patch(this.activeRoute, data, headers);
+          break;
+        case 'put':
+          axiosRequest = axios.put(this.activeRoute, data, headers);
+          break;
+        case 'get':
+          axiosRequest = axios.get(this.activeRoute, data, headers);
+          break;
+        case 'post':
+          axiosRequest = axios.post(this.activeRoute, data, headers);
+          break;
+        default:
+          axiosRequest = axios({
+            url: this.activeRoute,
+            method,
+            data,
+            headers,
+          });
       }
-      axiosRequest(this.activeRoute, data, headers)
+
+      axiosRequest
         .then((response) => {
           // console.log(response);
 
@@ -188,18 +223,17 @@ export default {
           });
         })
         .catch((error) => {
-          // console.log(error.response);
-
-          const total = ((performance.now() - execStart) / 1000).toFixed(2);
-          const execTime = `${total}s`;
-
-          console.log(error.data);
-
-          // this.setSandboxResponses({
-          //   route: this.activeRoute,
-          //   response: error.response,
-          //   performance: execTime,
-          // });
+          if (typeof error.response === 'undefined') {
+            this.serverResponseError = error;
+          } else {
+            const total = ((performance.now() - execStart) / 1000).toFixed(2);
+            const execTime = `${total}s`;
+            this.setSandboxResponses({
+              route: this.activeRoute,
+              response: error.response,
+              performance: execTime,
+            });
+          }
         })
         .then((always) => {
           // console.log('always', always);
@@ -207,22 +241,30 @@ export default {
           this.isRequesting = false;
         });
     },
+    refreshState() {
+      this.inputHeaders = {};
+      this.inputParameters = {};
+      if (this.headers) {
+        const headers = Object.entries(this.headers);
+        for (const [key, header] of headers) {
+          this.$set(this.inputHeaders, key, header.value);
+        }
+      }
+      if (this.parameters) {
+        const parameters = Object.entries(this.parameters);
+        for (const [key, parameter] of parameters) {
+          this.$set(this.inputParameters, key, parameter.value);
+        }
+      }
+    },
   },
   mounted() {
-    if (this.headers) {
-      const headers = Object.entries(this.headers);
-      for (const [key, header] of headers) {
-        this.$set(this.inputHeaders, key, header.value);
-      }
-    }
-    if (this.parameters) {
-      const parameters = Object.entries(this.parameters);
-      for (const [key, parameter] of parameters) {
-        this.$set(this.inputParameters, key, parameter.value);
-      }
-    }
+    this.refreshState();
   },
   watch: {
+    activeRoute() {
+      this.refreshState();
+    },
     // sandboxResponses(val) {
     //   console.log(val);
     // },

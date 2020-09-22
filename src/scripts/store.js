@@ -59,9 +59,11 @@ export default new Vuex.Store({
       const menu = {};
       const entries = Object.entries(state.routes);
 
+      menu.ungrouped = [];
+
       for (const [key, value] of entries) {
         if (!value.group) {
-          menu.push({
+          menu.ungrouped.push({
             url: key,
             name: value.name,
           });

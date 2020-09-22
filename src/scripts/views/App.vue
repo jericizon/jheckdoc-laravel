@@ -2,7 +2,26 @@
 div
   nav.navbar
     div.navbar-brand
-      span JheckDoc
+      a.navbar-item.jheckdoc-logo(
+        href="javascript:void(0)"
+      )
+        img(
+          alt="JheckDoc"
+          width="50"
+          height="50"
+          :src="jheckDocLogo"
+        )
+        span.ml-2 Jheck Doc
+
+      a.navbar-burger.burger(
+        role="button"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="main-menu"
+      )
+        span(aria-hidden="true")
+        span(aria-hidden="true")
+        span(aria-hidden="true")
 
   #main-wrapper
     div.left-col
@@ -13,12 +32,15 @@ div
         )
           p.menu-label {{group}}
 
-          ul.menu-list
+          ul.menu-list(
+            :class="{'no-group' : group === 'ungrouped'}"
+          )
             li(
-               v-for="(route, key) in routes"
-                :key="`menu-${key}`"
+              v-for="(route, key) in routes"
+              :key="`menu-${key}`"
             )
               router-link(
+                :class="{'is-active' : activeMenu === route.url}"
                 :to="{ name: 'app', query: { url: route.url }}"
               ) {{ route.name }}
 
@@ -79,11 +101,13 @@ import {
 } from 'vuex';
 
 import Bulma from 'bulma';
+
+import { base64Logo } from '../assets/utilities';
+
 import ParametersTab from './components/ParametersTab.vue';
 import ResponsesTab from './components/ResponsesTab.vue';
 import HeadersTab from './components/HeadersTab.vue';
 import SandboxTab from './components/SandboxTab.vue';
-
 
 export default {
   name: 'App',
@@ -101,7 +125,9 @@ export default {
         'responses',
         'sandbox',
       ],
+      jheckDocLogo: '',
       activeTab: 'parameters',
+      activeMenu: '',
     };
   },
   computed: {
@@ -140,6 +166,7 @@ export default {
     ]),
   },
   mounted() {
+    this.jheckDocLogo = base64Logo();
     const axiosRequest = {
       method: 'GET',
       url: `${this.assetUrl}/fetchdata.json`,
@@ -166,6 +193,9 @@ export default {
       const { query } = to;
       this.setActiveRoute(query.url);
     },
+    activeRoute(val) {
+      this.activeMenu = val;
+    },
     serverUrl() {
       axios.defaults.baseURL = this.serverUrl;
     },
@@ -180,6 +210,24 @@ export default {
 </script>
 
 <style lang="scss">
+
+.navbar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  & + div {
+    margin-top: 60px;
+  }
+
+  .navbar-item{
+    img{
+      max-height: 100%;
+    }
+  }
+
+}
 
 #main-wrapper{
   display: -webkit-box;
@@ -216,12 +264,6 @@ export default {
 
         &.no-group{
             margin-bottom: 10px;
-
-            li{
-                a{
-                    padding: .5em 0;
-                }
-            }
         }
     }
 
