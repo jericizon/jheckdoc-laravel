@@ -28,6 +28,9 @@ class JheckdocGenerate extends Command
     protected $jheckdoc = [];
 
     protected $jsonFile;
+    protected $success = 0;
+    protected $failed = 0;
+    protected $total = 0;
 
     /**
      * Execute the console command.
@@ -52,6 +55,13 @@ class JheckdocGenerate extends Command
 
         sleep(1);
         $this->createJson($this->jheckdoc);
+
+        $this->table(['Label', 'Count'], [
+            ['Success', $this->success],
+            ['Failed', $this->failed],
+            ['-','-'],
+            ['Total', $this->total],
+        ]);
     }
 
     private function getFiles($dir, &$results = array())
@@ -77,11 +87,15 @@ class JheckdocGenerate extends Command
         if (!file_exists($file) || !is_file($file)) return;
 
         $tokens = token_get_all(file_get_contents($file));
+        $success = 0;
+        $failed = 0;
+        $total = 0;
         foreach ($tokens as $token) {
-
             if ($token[0] == T_COMMENT || $token[0] == T_DOC_COMMENT) {
                 $line = trim($token[1], ' ');
                 if (stripos($line, '@jheckdoc') !== false) {
+
+                    $this->total++;
 
                     $line = str_replace('/*@jheckdoc', '', $line);
                     $line = str_replace('*/', '', $line);
@@ -94,9 +108,12 @@ class JheckdocGenerate extends Command
                         $jsonRoute = $json->route;
                         unset($json->route);
                         $this->jheckdoc['routes'][$jsonRoute] = $json;
+                        $this->line("✓ $jsonRoute");
+                        $this->success++;
                     }
                     catch(\Exception $e){
                         $this->error($e->getMessage());
+                        $this->failed++;
                     }
                 }
             }

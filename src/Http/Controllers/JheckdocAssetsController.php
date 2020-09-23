@@ -35,6 +35,9 @@ class JheckdocAssetsController extends Controller
             }
             else{
                 $contentType = (pathinfo($asset))['extension'];
+
+                if($contentType === 'map') $contentType = 'js';
+
                 if($contentType === 'css' || $contentType === 'js') $asset = "$contentType/$asset";
 
                 $path = self::assetDist($asset);
