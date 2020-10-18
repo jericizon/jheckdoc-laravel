@@ -18,8 +18,13 @@
     <template
       v-if="showTable"
     >
+      <h4 class="mb-2 uppercase text-base font-semibold text-gray-600">Request URL</h4>
 
-      <h4 class="mb-2 uppercase text-base font-semibold text-gray-600">Headers</h4>
+      <div class="py-2 p-4">
+        <div class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-500 bg-gray-100 border" v-html="requestHtmlUrl"></div>
+      </div>
+
+      <h4 class="mt-5 mb-2 uppercase text-base font-semibold text-gray-600">Headers</h4>
 
       <div
         class="py-2 p-4"
@@ -47,7 +52,7 @@
           v-for="(parameter, key) in inputParameters"
           :key="`parameter-${key}`"
         >
-          <span class="capitalize text-gray-700 text-gray-400">
+          <span class="text-gray-700 text-gray-400">
             {{key}}<span v-if="isRequired(key)" class="text-red text-sm font-bold">*</span>:
           </span>
           <input
@@ -69,111 +74,56 @@
           @click="executeRequest"
           :disabled="isRequesting"
         >
-          Execute
+          {{isRequesting ? `Processing...` : 'Execute'}}
         </button>
 
-        <template v-if="serverResponseError">
-          <Card title="Error encountered">
+
+        <Card
+          v-if="serverResponseError"
+          title="Error encountered"
+        >
+          <div class="server-response-content">
+            <pre class="bg-black text-xs p-5 text-yellow-500">{{serverResponseError}}</pre>
+          </div>
+        </Card>
+
+        <template
+          v-if="hasServerResponse"
+        >
+          <Card :title="`Server response - ${serverResponsePerformance}`">
             <div class="server-response-content">
-              <pre class="bg-black p-5 text-yellow-500">{{serverResponseError}}</pre>
+              <pre class="bg-black text-xs p-5 text-yellow-500">{{serverResponseContent}}</pre>
             </div>
           </Card>
-        </template>
 
-        <template v-else-if="hasServerResponse">
           <Card
-            :title="`Server response - ${serverResponsePerformance}`"
+            title="Response headers"
+            class="mt-2"
           >
-            <div class="server-response-content">
-              <pre class="bg-black p-5 text-yellow-500">{{serverResponseContent}}</pre>
-            </div>
+            <ul>
+              <li
+                class="mb-1 text-gray-700 text-sm font-medium"
+                v-for="(serverResponseHeader, key) in serverResponseHeaders"
+                :key="`server-response-header-${key}`"
+              >{{key}} : <span class="font-normal">{{serverResponseHeader}}</span></li>
+            </ul>
+          </Card>
+
+          <Card
+            title="Request info"
+            class="mt-2"
+          >
+            <ul>
+              <li class="mb-1 text-gray-700 text-sm font-medium">Request Method: <span class="font-normal uppercase">{{serverResponseConfig.method}}</span></li>
+              <li class="mb-1 text-gray-700 text-sm font-medium">Status code: <span class="font-normal">{{serverResponseCode}}</span></li>
+            </ul>
           </Card>
         </template>
       </template>
-
     </template>
-
 
   </Card>
 </div>
-
-<!-- #sandbox-tab
-  h3.title.is-3 Sandbox
-
-  template(v-if="headers")
-
-    Card(title="Headers")
-
-      div.field.is-horizontal(
-        v-for="(header, key) in inputHeaders"
-        :key="`header-${key}`"
-      )
-        .field-label.is-normal
-          label.label {{key}}
-
-        .field-body
-          .field
-            p.control
-              input.input(
-                v-model="inputHeaders[key]"
-              )
-
-    template(v-if="parameters")
-      Card(title="Parameters")
-        div.field.is-horizontal(
-          v-for="(parameter, key) in inputParameters"
-          :key="`parameter-${key}`"
-        )
-          .field-label.is-normal
-            label.label {{key}}
-              span.required(v-if="isRequired(key)") &nbsp;*
-
-          .field-body
-            .field
-              p.control
-                input.input(
-                  v-model="inputParameters[key]"
-                  :class="{'form-incomplete': isRequired(key) && !inputParameters[key], 'is-danger' : isRequired(key) && !inputParameters[key] && showValidationError}"
-                )
-                span.mt-1.tag.is-danger(v-if="isRequired(key) && !inputParameters[key] && showValidationError") This field is required
-
-    button.button.is-primary(
-      @click="executeRequest"
-      :disabled="isRequesting"
-    ) Execute
-
-    template(
-      v-if="serverResponseError"
-    )
-      pre.mt-5(
-        v-html="serverResponseError"
-      )
-
-    template(
-      v-else-if="hasServerResponse"
-    )
-      hr
-      h4.title.is-4 Server response
-
-      Card(:title="`Response content - ${serverResponsePerformance}`")
-        .server-response-content
-          pre(
-            v-html="serverResponseContent"
-          )
-
-      Card(title="Response headers")
-        ul.server-response-headers
-          li(
-            v-for="(serverResponseHeader, key) in serverResponseHeaders"
-            :key="`server-response-header-${key}`"
-          ) {{key}} : {{serverResponseHeader}}
-
-      Card(title="Request info")
-        ul
-          li Request URL: {{serverResponseConfig.url}}
-          li Request Method: {{serverResponseConfig.method}}
-          li Status code: {{serverResponseCode}} -->
-
 </template>
 
 <script>
@@ -214,6 +164,7 @@ export default {
       'getActiveRouteContent',
       'getActiveRouteServerResponse',
       'getActiveRouteServerPerformance',
+      'getRouteLink',
     ]),
     serverResponseCode() {
       return typeof this.getActiveRouteServerResponse.status !== 'undefined'
@@ -242,6 +193,29 @@ export default {
     },
     hasServerResponse() {
       return typeof this.getActiveRouteServerResponse.data !== 'undefined';
+    },
+    requestHtmlUrl() {
+      let params = this.getRouteLink.split('/');
+      params = params.map((item) => {
+        if (item.includes('{') && item.includes('}')) {
+          const param = item.replace('{', '').replace('}', '');
+          const newItem = this.inputParameters[param] ? this.inputParameters[param] : item;
+          return `<span class="border-b border-black font-bold text-black">${newItem}</span>`;
+        }
+        return item;
+      });
+      return params.join('/');
+    },
+    requestUrl() {
+      let params = this.getRouteLink.split('/');
+      params = params.map((item) => {
+        if (item.includes('{') && item.includes('}')) {
+          const param = item.replace('{', '').replace('}', '');
+          return this.inputParameters[param] ? this.inputParameters[param] : '';
+        }
+        return item;
+      });
+      return params.join('/');
     },
   },
   methods: {
@@ -286,23 +260,23 @@ export default {
 
       switch (method.toLowerCase()) {
         case 'delete':
-          axiosRequest = axios.delete(this.activeRoute, data, headers);
+          axiosRequest = axios.delete(this.requestUrl, data, headers);
           break;
         case 'patch':
-          axiosRequest = axios.patch(this.activeRoute, data, headers);
+          axiosRequest = axios.patch(this.requestUrl, data, headers);
           break;
         case 'put':
-          axiosRequest = axios.put(this.activeRoute, data, headers);
+          axiosRequest = axios.put(this.requestUrl, data, headers);
           break;
         case 'get':
-          axiosRequest = axios.get(this.activeRoute, data, headers);
+          axiosRequest = axios.get(this.requestUrl, data, headers);
           break;
         case 'post':
-          axiosRequest = axios.post(this.activeRoute, data, headers);
+          axiosRequest = axios.post(this.requestUrl, data, headers);
           break;
         default:
           axiosRequest = axios({
-            url: this.activeRoute,
+            url: this.requestUrl,
             method,
             data,
             headers,
