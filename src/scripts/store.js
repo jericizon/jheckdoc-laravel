@@ -9,19 +9,24 @@ const assetUrl = typeof window.__JHECKDOC__ !== 'undefined' ? window.__JHECKDOC_
 export default new Vuex.Store({
   state: {
     assetUrl,
-    version: '',
+    jheckdocVersion: '',
+    appInfo: {},
     mainUrl: '',
     serverUrl: '',
     routes: {},
     activeRoute: '',
+    activeMethod: '',
     sandboxResponses: {},
   },
   mutations: {
     setAssetUrl(state, item) {
       state.assetUrl = item;
     },
-    setVersion(state, item) {
-      state.version = item;
+    setAppInfo(state, item) {
+      state.appInfo = item;
+    },
+    setJheckDocVersion(state, item) {
+      state.jheckdocVersion = item;
     },
     setMainUrl(state, item) {
       state.mainUrl = item;
@@ -35,6 +40,9 @@ export default new Vuex.Store({
     setActiveRoute(state, item) {
       state.activeRoute = item;
     },
+    setActiveMethod(state, item) {
+      state.activeMethod = item;
+    },
     setSandboxResponses(state, item) {
       const { route, response, performance } = item;
       Vue.set(state.sandboxResponses, route, { response, performance });
@@ -43,13 +51,20 @@ export default new Vuex.Store({
   actions: {
     async updateInitStates({ state, commit }, item) {
       const {
-        version, main_url, server_url, routes,
+        jheckdoc, main_url, info, routes,
       } = item;
 
-      commit('setVersion', version || '1.0.0');
+      const { servers } = info;
+
+      commit('setJheckDocVersion', jheckdoc || '1.0.0');
       commit('setMainUrl', main_url || '');
-      commit('setServerUrl', server_url || '');
+      commit('setAppInfo', info, {});
+      // commit('setServerUrl', server_url || '');
       commit('setRoutes', routes || {});
+
+      if (servers.length) {
+        commit('setServerUrl', servers[0].url);
+      }
     },
   },
   getters: {
@@ -61,27 +76,36 @@ export default new Vuex.Store({
 
       menu.ungrouped = [];
 
-      for (const [key, value] of entries) {
-        if (!value.group) {
-          menu.ungrouped.push({
-            url: key,
-            name: value.name,
-          });
-        } else {
-          if (typeof menu[value.group] === 'undefined') menu[value.group] = [];
+      entries.map((item) => {
+        const routeUrl = item[0];
+        const routeItem = state.routes[routeUrl];
 
-          menu[value.group].push({
-            url: key,
-            name: value.name,
-          });
-        }
-      }
+        Object.keys(routeItem).map((method) => {
+          const route = routeItem[method];
+          if (!route.group) {
+            menu.ungrouped.push({
+              url: routeUrl,
+              name: route.name,
+              method,
+            });
+          } else {
+            if (typeof menu[route.group] === 'undefined') menu[route.group] = [];
+            menu[route.group].push({
+              url: routeUrl,
+              name: route.name,
+              method,
+            });
+          }
+        });
+      });
 
       return menu;
     },
     getActiveRouteContent: (state) => {
-      if (typeof state.routes[state.activeRoute] === 'undefined') return '';
-      return state.routes[state.activeRoute];
+      if (typeof state.routes[state.activeRoute] !== 'undefined' && typeof state.routes[state.activeRoute][state.activeMethod] !== 'undefined') {
+        return state.routes[state.activeRoute][state.activeMethod];
+      }
+      return '';
     },
     getRouteLink: (state) => {
       if (!state.activeRoute) return '';
@@ -95,5 +119,6 @@ export default new Vuex.Store({
       if (typeof state.sandboxResponses[state.activeRoute] === 'undefined') return {};
       return state.sandboxResponses[state.activeRoute].performance;
     },
+    getServers: state => state.appInfo.servers,
   },
 });

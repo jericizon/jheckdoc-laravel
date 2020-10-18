@@ -1,5 +1,103 @@
-<template lang="pug">
-#sandbox-tab
+<template>
+
+<div
+  class="my-5 relative"
+  v-if="headers"
+>
+  <Card
+    title="Sandbox"
+    backgroundClass="bg-yellow-100"
+  >
+    <button
+      class="absolute font-light right-0 text-sm top-0 underline mr-2 mt-3 px-3"
+      @click="showTable = !showTable"
+    >
+      {{ showTable ? 'Hide' : 'Show'}}
+    </button>
+
+    <template
+      v-if="showTable"
+    >
+
+      <h4 class="mb-2 uppercase text-base font-semibold text-gray-600">Headers</h4>
+
+      <div
+        class="py-2 p-4"
+        v-for="(header, key) in inputHeaders"
+        :key="`header-${key}`"
+      >
+        <label class="block text-sm">
+          <span class="capitalize text-gray-700 text-gray-400">
+            {{key}}:
+          </span>
+          <input
+            class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 bg-gray-100 border form-input"
+            v-model="inputHeaders[key]"
+            :placeholder="key"
+          >
+        </label>
+
+      </div>
+
+      <template v-if="parameters">
+        <h4 class="mt-5 mb-2 uppercase text-base font-semibold text-gray-600">Parameters</h4>
+
+        <div
+          class="py-2 p-4"
+          v-for="(parameter, key) in inputParameters"
+          :key="`parameter-${key}`"
+        >
+          <span class="capitalize text-gray-700 text-gray-400">
+            {{key}}<span v-if="isRequired(key)" class="text-red text-sm font-bold">*</span>:
+          </span>
+          <input
+            class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 bg-gray-100 border form-input"
+            :placeholder="key"
+            v-model="inputParameters[key]"
+            :class="{'form-incomplete': isRequired(key) && !inputParameters[key], 'border-red-500' : isRequired(key) && !inputParameters[key] && showValidationError}"
+          >
+          <span
+            class="text-xs text-red-600 text-red-400"
+            v-if="isRequired(key) && !inputParameters[key] && showValidationError"
+          >
+            This field is required
+          </span>
+        </div>
+
+        <button
+          class="my-10 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+          @click="executeRequest"
+          :disabled="isRequesting"
+        >
+          Execute
+        </button>
+
+        <template v-if="serverResponseError">
+          <Card title="Error encountered">
+            <div class="server-response-content">
+              <pre class="bg-black p-5 text-yellow-500">{{serverResponseError}}</pre>
+            </div>
+          </Card>
+        </template>
+
+        <template v-else-if="hasServerResponse">
+          <Card
+            :title="`Server response - ${serverResponsePerformance}`"
+          >
+            <div class="server-response-content">
+              <pre class="bg-black p-5 text-yellow-500">{{serverResponseContent}}</pre>
+            </div>
+          </Card>
+        </template>
+      </template>
+
+    </template>
+
+
+  </Card>
+</div>
+
+<!-- #sandbox-tab
   h3.title.is-3 Sandbox
 
   template(v-if="headers")
@@ -74,7 +172,7 @@
         ul
           li Request URL: {{serverResponseConfig.url}}
           li Request Method: {{serverResponseConfig.method}}
-          li Status code: {{serverResponseCode}}
+          li Status code: {{serverResponseCode}} -->
 
 </template>
 
@@ -98,6 +196,7 @@ export default {
   },
   data() {
     return {
+      showTable: true,
       inputHeaders: {},
       inputParameters: {},
       isRequesting: false,
@@ -108,6 +207,7 @@ export default {
   computed: {
     ...mapState([
       'activeRoute',
+      'activeMethod',
       'sandboxResponses',
     ]),
     ...mapGetters([
@@ -170,7 +270,7 @@ export default {
 
       const data = JSON.parse(JSON.stringify(this.inputParameters));
       const headers = JSON.parse(JSON.stringify(this.inputHeaders));
-      const { method } = this.getActiveRouteContent;
+      const method = this.activeMethod;
 
       // console.log(data, headers, method);
 

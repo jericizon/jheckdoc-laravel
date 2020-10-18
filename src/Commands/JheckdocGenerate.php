@@ -93,21 +93,46 @@ class JheckdocGenerate extends Command
         foreach ($tokens as $token) {
             if ($token[0] == T_COMMENT || $token[0] == T_DOC_COMMENT) {
                 $line = trim($token[1], ' ');
-                if (stripos($line, '@jheckdoc') !== false) {
+
+
+                if (stripos($line, '@jheckdocInfo') !== false) {
+
+                    try {
+                        $line = str_replace('/*@jheckdocInfo', '', $line);
+                        $line = str_replace('*/', '', $line);
+                        $line = str_replace("\n", '', $line);
+                        $json = json_decode($line);
+
+
+                        if(is_null($json)){
+                            $this->error('@jheckdocInfo detected, but failed to parse the json.');
+                        }
+                        else{
+                            $this->line("✓ @jheckdocInfo added");
+                            $this->jheckdoc['info'] = $json;
+                        }
+                    }
+                    catch(\Exception $e){
+                        $this->error($e->getMessage());
+                    }
+
+
+                }
+                else if (stripos($line, '@jheckdoc') !== false) {
 
                     $this->total++;
 
                     $line = str_replace('/*@jheckdoc', '', $line);
                     $line = str_replace('*/', '', $line);
                     $line = str_replace("\n", '', $line);
-                    // $line = str_replace('},]', '}]', $line);
-                    // $line = str_replace(',}', '}', $line);
                     $json = json_decode($line);
 
                     try{
                         $jsonRoute = $json->route;
+                        $method = strtolower($json->method);
                         unset($json->route);
-                        $this->jheckdoc['routes'][$jsonRoute] = $json;
+                        unset($json->method);
+                        $this->jheckdoc['routes'][$jsonRoute][$method] = $json;
                         $this->line("✓ $jsonRoute");
                         $this->success++;
                     }
@@ -128,8 +153,7 @@ class JheckdocGenerate extends Command
 
     private function createJheckDocApp()
     {
-        $this->jheckdoc['version'] = JheckDoc::version();
+        $this->jheckdoc['jhekdoc'] = JheckDoc::version();
         $this->jheckdoc['main_url'] = url(config('jheckdoc.url'));
-        $this->jheckdoc['server_url'] = rtrim(config('jheckdoc.api_url'), '/');
     }
 }

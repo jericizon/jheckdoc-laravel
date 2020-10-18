@@ -1,14 +1,15 @@
 const path = require('path');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
+  css: {
+    extract: true,
+  },
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'scss',
       patterns: [
         // only include less file with variables and mixins
         // not those that will generate actual css
-        path.resolve(__dirname, './node_modules/bulma/bulma.sass'),
       ],
     },
   },
