@@ -83,7 +83,7 @@
           title="Error encountered"
         >
           <div class="server-response-content">
-            <pre class="bg-black text-xs p-5 text-yellow-500">{{serverResponseError}}</pre>
+            <pre class="bg-black break-words max-w- p-5 text-xs text-yellow-500 whitespace-pre-wrap">{{serverResponseError}}</pre>
           </div>
         </Card>
 
@@ -92,7 +92,7 @@
         >
           <Card :title="`Server response - ${serverResponsePerformance}`">
             <div class="server-response-content">
-              <pre class="bg-black text-xs p-5 text-yellow-500">{{serverResponseContent}}</pre>
+              <pre class="bg-black break-words max-w- p-5 text-xs text-yellow-500 whitespace-pre-wrap">{{serverResponseContent}}</pre>
             </div>
           </Card>
 
@@ -242,7 +242,7 @@ export default {
 
       const execStart = performance.now();
 
-      const data = JSON.parse(JSON.stringify(this.inputParameters));
+      let data = JSON.parse(JSON.stringify(this.inputParameters));
       let headers = JSON.parse(JSON.stringify(this.inputHeaders));
       const method = this.activeMethod;
 
@@ -274,6 +274,19 @@ export default {
           axiosRequest = axios.get(this.requestUrl, headers, data);
           break;
         case 'post':
+
+          if ((headers.headers['Content-Type'] !== 'undefined' && headers.headers['Content-Type'] === 'application/x-www-form-urlencoded')
+            || (headers.headers['content-type'] !== 'undefined' && headers.headers['content-type'] === 'application/x-www-form-urlencoded')
+          ) {
+            const params = new URLSearchParams();
+            Object.keys(data).map((key) => {
+              params.append(key, data[key]);
+              return data[key];
+            });
+
+            data = params;
+          }
+
           axiosRequest = axios.post(this.requestUrl, data, headers);
           break;
         default:
@@ -355,6 +368,10 @@ export default {
 
 <style lang="scss">
 .server-response-content{
+  position: relative;
+  max-width: 850px;
+  width: 100%;
+
   pre{
     max-height: 400px;
     overflow: auto;
