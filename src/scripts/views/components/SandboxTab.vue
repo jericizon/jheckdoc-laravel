@@ -421,7 +421,7 @@ export default {
   width: 100%;
 
   pre{
-    max-height: 400px;
+    max-height: 500px;
     overflow: auto;
   }
 }

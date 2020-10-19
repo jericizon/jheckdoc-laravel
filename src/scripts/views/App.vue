@@ -279,7 +279,8 @@
             {{getActiveRouteContent.name}}
           </h2>
           <div
-            class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
+            class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-white rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
+            :class="badgeClass"
           >
             <div class="flex items-center">
               <span class="uppercase">{{activeMethod}}</span>
@@ -362,6 +363,27 @@ export default {
       'getRouteLink',
       'getServers',
     ]),
+    badgeClass() {
+      const style = [];
+
+      switch (this.activeMethod.toLowerCase()) {
+        case 'post':
+          style.push('bg-green-600');
+          break;
+        case 'put':
+        case 'patch':
+          style.push('bg-yellow-600');
+          break;
+        case 'delete':
+          style.push('bg-red-600');
+          break;
+        default:
+          style.push('bg-purple-600');
+          break;
+      }
+
+      return style;
+    },
     getParameters() {
       if (typeof this.getActiveRouteContent.params !== 'object') return '';
 
