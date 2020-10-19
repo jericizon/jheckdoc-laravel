@@ -417,7 +417,7 @@ export default {
     };
     axios(axiosRequest)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         this.updateInitStates(response.data);
       })
       .catch((error) => {

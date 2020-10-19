@@ -243,10 +243,12 @@ export default {
       const execStart = performance.now();
 
       const data = JSON.parse(JSON.stringify(this.inputParameters));
-      const headers = JSON.parse(JSON.stringify(this.inputHeaders));
+      let headers = JSON.parse(JSON.stringify(this.inputHeaders));
       const method = this.activeMethod;
 
-      // console.log(data, headers, method);
+      headers = { headers };
+
+      console.log(data, headers, method);
 
       this.isRequesting = true;
 
@@ -269,7 +271,7 @@ export default {
           axiosRequest = axios.put(this.requestUrl, data, headers);
           break;
         case 'get':
-          axiosRequest = axios.get(this.requestUrl, data, headers);
+          axiosRequest = axios.get(this.requestUrl, headers, data);
           break;
         case 'post':
           axiosRequest = axios.post(this.requestUrl, data, headers);

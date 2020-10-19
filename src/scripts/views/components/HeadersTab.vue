@@ -32,7 +32,15 @@
           :key="`table-header-${key}`"
         >
           <td class="font-medium px-4 py-3 border dark:border-gray-700 bg-gray-50 dark:text-gray-400">{{key}}</td>
-          <td class="font-medium px-4 py-3 border dark:border-gray-700 bg-gray-50 dark:text-gray-400">{{header.value}}</td>
+          <td class="font-medium px-4 py-3 border dark:border-gray-700 bg-gray-50">
+            <template v-if="header.placeholder">
+              <span class="text-purple-600 italic">{{header.placeholder}}</span>
+            </template>
+
+            <template v-else>
+              <span>{{header.value}}</span>
+            </template>
+          </td>
           <td class="font-medium px-4 py-3 border dark:border-gray-700 bg-gray-50 dark:text-gray-400">{{header.required ? 'Required' : 'Optional'}}</td>
         </tr>
       </tbody>
