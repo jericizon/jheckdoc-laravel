@@ -175,13 +175,19 @@ export default {
     ...mapState([
       'activeRoute',
       'activeMethod',
+    ]),
+    ...mapState('sandbox', [
       'sandboxResponses',
     ]),
     ...mapGetters([
       'getActiveRouteContent',
-      'getActiveRouteServerResponse',
-      'getActiveRouteServerPerformance',
       'getRouteLink',
+    ]),
+    ...mapGetters('sandbox', [
+      'getActiveRouteServerPerformance',
+      'getActiveRouteServerResponse',
+      'getActiveRouteHeaderInput',
+      'getActiveRouteParameterInput',
     ]),
     serverResponseCode() {
       return typeof this.getActiveRouteServerResponse.status !== 'undefined'
@@ -236,7 +242,9 @@ export default {
     },
   },
   methods: {
-    ...mapMutations([
+    ...mapMutations('sandbox', [
+      'setSandboxHeaderInput',
+      'setSandboxParameterInput',
       'setSandboxResponses',
     ]),
     defaultValue(input, defaultContent = '') {
@@ -261,11 +269,10 @@ export default {
 
       let data = JSON.parse(JSON.stringify(this.inputParameters));
       const inputHeaders = JSON.parse(JSON.stringify(this.inputHeaders));
-      const headers = { inputHeaders };
+      const headers = { headers: inputHeaders };
       const method = this.activeMethod;
 
-
-      console.log(data, headers, method);
+      // console.log(data, headers, method);
 
       this.isRequesting = true;
 
@@ -273,6 +280,16 @@ export default {
       this.setSandboxResponses({
         route: this.activeRoute,
         response: {},
+      });
+
+      this.setSandboxHeaderInput({
+        route: this.activeRoute,
+        headers: inputHeaders,
+      });
+
+      this.setSandboxParameterInput({
+        route: this.activeRoute,
+        parameters: data,
       });
 
       let axiosRequest = '';
@@ -296,8 +313,8 @@ export default {
           break;
         case 'post':
 
-          if ((headers.headers['Content-Type'] !== 'undefined' && headers.headers['Content-Type'] === 'application/x-www-form-urlencoded')
-            || (headers.headers['content-type'] !== 'undefined' && headers.headers['content-type'] === 'application/x-www-form-urlencoded')
+          if ((typeof headers.headers['Content-Type'] !== 'undefined' && headers.headers['Content-Type'] === 'application/x-www-form-urlencoded')
+            || (typeof headers.headers['content-type'] !== 'undefined' && headers.headers['content-type'] === 'application/x-www-form-urlencoded')
           ) {
             const params = new URLSearchParams();
             Object.keys(data).map((key) => {
@@ -359,16 +376,27 @@ export default {
       this.serverResponseError = '';
 
       if (this.headers) {
-        const headers = Object.entries(this.headers);
-        for (const [key, header] of headers) {
-          this.$set(this.inputHeaders, key, header.value);
-        }
+        const headers = JSON.parse(JSON.stringify(this.headers));
+        Object.keys(headers).map((key) => {
+          const header = headers[key];
+
+          let headerValue = header.value;
+
+          if (typeof this.getActiveRouteHeaderInput[key] !== 'undefined') headerValue = this.getActiveRouteHeaderInput[key];
+
+          return this.$set(this.inputHeaders, key, headerValue);
+        });
       }
       if (this.parameters) {
-        const parameters = Object.entries(this.parameters);
-        for (const [key, parameter] of parameters) {
-          this.$set(this.inputParameters, key, parameter.value);
-        }
+        const parameters = JSON.parse(JSON.stringify(this.parameters));
+        Object.keys(parameters).map((key) => {
+          const parameter = parameters[key];
+          let parameterValue = parameter.value;
+
+          if (typeof this.getActiveRouteParameterInput[key] !== 'undefined') parameterValue = this.getActiveRouteParameterInput[key];
+
+          return this.$set(this.inputParameters, key, parameterValue);
+        });
       }
     },
   },
@@ -379,9 +407,9 @@ export default {
     activeRoute() {
       this.refreshState();
     },
-    // sandboxResponses(val) {
-    //   console.log(val);
-    // },
+    sandboxResponses(val) {
+      console.log(val, this.getActiveRouteServerResponse);
+    },
   },
 };
 </script>

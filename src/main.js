@@ -2,7 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import BaseLayout from './scripts/BaseLayout.vue';
 // import store from './store/store';
-import store from './scripts/store';
+import store from './scripts/store/store';
 import router from './scripts/router';
 
 import * as BaseUI from './scripts/views/BaseUI';

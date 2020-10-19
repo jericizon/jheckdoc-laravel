@@ -2,11 +2,16 @@ import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import Sandbox from './sandbox';
+
 Vue.use(Vuex);
 
 const assetUrl = typeof window.__JHECKDOC__ !== 'undefined' ? window.__JHECKDOC__.asset_url : process.env.VUE_APP_JHECKDOC_ASSETS;
 
 export default new Vuex.Store({
+  modules: {
+    sandbox: Sandbox,
+  },
   state: {
     assetUrl,
     jheckdocVersion: '',
@@ -16,7 +21,6 @@ export default new Vuex.Store({
     routes: {},
     activeRoute: '',
     activeMethod: '',
-    sandboxResponses: {},
   },
   mutations: {
     setAssetUrl(state, item) {
@@ -42,10 +46,6 @@ export default new Vuex.Store({
     },
     setActiveMethod(state, item) {
       state.activeMethod = item;
-    },
-    setSandboxResponses(state, item) {
-      const { route, response, performance } = item;
-      Vue.set(state.sandboxResponses, route, { response, performance });
     },
   },
   actions: {
@@ -110,14 +110,6 @@ export default new Vuex.Store({
     getRouteLink: (state) => {
       if (!state.activeRoute) return '';
       return `${state.serverUrl}${state.activeRoute}`;
-    },
-    getActiveRouteServerResponse: (state) => {
-      if (typeof state.sandboxResponses[state.activeRoute] === 'undefined') return {};
-      return state.sandboxResponses[state.activeRoute].response;
-    },
-    getActiveRouteServerPerformance: (state) => {
-      if (typeof state.sandboxResponses[state.activeRoute] === 'undefined') return {};
-      return state.sandboxResponses[state.activeRoute].performance;
     },
     getServers: state => state.appInfo.servers,
   },
