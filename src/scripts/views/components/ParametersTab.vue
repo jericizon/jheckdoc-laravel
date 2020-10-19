@@ -45,13 +45,18 @@
         v-for="(params, key) in parameters"
         :key="`parameter-description-${key}`"
       >
-        <h4 class="mb-2 uppercase text-base font-semibold text-gray-500">{{key}}</h4>
+        <h4 class="mb-2 text-base font-semibold text-gray-500">{{key}}</h4>
         <ul
           class="border-b pb-5"
         >
           <li class="mb-1 text-gray-700 text-sm font-medium">Type: <span class="font-normal">{{params.type}}</span></li>
           <li class="mb-1 text-gray-700 text-sm font-medium">Required: <span class="font-normal">{{params.required ? 'true' : 'false'}}</span></li>
           <li class="mb-1 text-gray-700 text-sm font-medium">Description: <span class="font-normal">{{params.description}}</span></li>
+          <li
+            v-if="params.options"
+            class="mb-1 text-gray-700 text-sm font-medium">Options: <span class="bg-yellow-300 font-normal px-2">{{params.options.join(', ')}}</span>
+          </li>
+
         </ul>
       </div>
     </template>

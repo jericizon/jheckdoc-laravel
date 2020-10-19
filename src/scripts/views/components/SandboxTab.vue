@@ -49,18 +49,35 @@
 
         <div
           class="py-2 p-4"
-          v-for="(parameter, key) in inputParameters"
+          v-for="(parameter, key) in parameters"
           :key="`parameter-${key}`"
         >
           <span class="text-gray-700 text-gray-400">
             {{key}}<span v-if="isRequired(key)" class="text-red text-sm font-bold">*</span>:
           </span>
-          <input
-            class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 bg-gray-100 border form-input"
-            :placeholder="key"
-            v-model="inputParameters[key]"
-            :class="{'form-incomplete': isRequired(key) && !inputParameters[key], 'border-red-500' : isRequired(key) && !inputParameters[key] && showValidationError}"
-          >
+          <template v-if="parameter.options">
+            <select
+              class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 bg-gray-100 border form-input"
+              v-model="inputParameters[key]"
+              :class="{'form-incomplete': isRequired(key) && !inputParameters[key], 'border-red-500' : isRequired(key) && !inputParameters[key] && showValidationError}"
+            >
+              <option class="text-gray-500" v-html="`Select ${key}`" value=""></option>
+              <option
+                v-for="(option, optionKey) in parameter.options"
+                :key="`parameter-${option}-${optionKey}`"
+                :value="option"
+                >{{option}}</option>
+            </select>
+          </template>
+
+          <template v-else>
+            <input
+              class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 bg-gray-100 border form-input"
+              :placeholder="key"
+              v-model="inputParameters[key]"
+              :class="{'form-incomplete': isRequired(key) && !inputParameters[key], 'border-red-500' : isRequired(key) && !inputParameters[key] && showValidationError}"
+            >
+          </template>
           <span
             class="text-xs text-red-600 text-red-400"
             v-if="isRequired(key) && !inputParameters[key] && showValidationError"
@@ -243,10 +260,10 @@ export default {
       const execStart = performance.now();
 
       let data = JSON.parse(JSON.stringify(this.inputParameters));
-      let headers = JSON.parse(JSON.stringify(this.inputHeaders));
+      const inputHeaders = JSON.parse(JSON.stringify(this.inputHeaders));
+      const headers = { inputHeaders };
       const method = this.activeMethod;
 
-      headers = { headers };
 
       console.log(data, headers, method);
 
@@ -271,7 +288,11 @@ export default {
           axiosRequest = axios.put(this.requestUrl, data, headers);
           break;
         case 'get':
-          axiosRequest = axios.get(this.requestUrl, headers, data);
+
+          axiosRequest = axios.get(this.requestUrl, {
+            headers: inputHeaders,
+            params: data,
+          });
           break;
         case 'post':
 
@@ -283,7 +304,6 @@ export default {
               params.append(key, data[key]);
               return data[key];
             });
-
             data = params;
           }
 
