@@ -52,7 +52,7 @@
         >
           <li class="mb-1 text-gray-700 text-sm font-medium">Type: <span class="font-normal">{{params.type}}</span></li>
           <li class="mb-1 text-gray-700 text-sm font-medium">Required: <span class="font-normal">{{params.required ? 'true' : 'false'}}</span></li>
-          <li class="mb-1 text-gray-700 text-sm font-medium">Description: <span class="font-normal">{{params.description}}</span></li>
+          <li class="mb-1 text-gray-700 text-sm font-medium" v-if="params.description">Description: <span class="font-normal">{{params.description}}</span></li>
           <li
             v-if="params.options"
             class="mb-1 text-gray-700 text-sm font-medium">Options: <span class="bg-yellow-300 font-normal px-2">{{params.options.join(', ')}}</span>

@@ -42,7 +42,7 @@ class JheckdocGenerate extends Command
     public function handle()
     {
 
-        $this->jsonFile = ltrim(config('jheckdoc.json_file'),'/');
+        $this->jsonFile = ltrim(config('jheckdoc.json_file'), '/');
 
         $files = $this->getFiles(config('jheckdoc.controllers'));
 
@@ -59,7 +59,7 @@ class JheckdocGenerate extends Command
         $this->table(['Label', 'Count'], [
             ['Success', $this->success],
             ['Failed', $this->failed],
-            ['-','-'],
+            ['-', '-'],
             ['Total', $this->total],
         ]);
     }
@@ -104,21 +104,16 @@ class JheckdocGenerate extends Command
                         $json = json_decode($line);
 
 
-                        if(is_null($json)){
+                        if (is_null($json)) {
                             $this->error('@jheckdocInfo detected, but failed to parse the json.');
-                        }
-                        else{
-                            $this->line("✓ @jheckdocInfo added");
+                        } else {
+                            $this->line("[X] @jheckdocInfo added");
                             $this->jheckdoc['info'] = $json;
                         }
-                    }
-                    catch(\Exception $e){
+                    } catch (\Exception $e) {
                         $this->error($e->getMessage());
                     }
-
-
-                }
-                else if (stripos($line, '@jheckdoc') !== false) {
+                } else if (stripos($line, '@jheckdoc') !== false) {
 
                     $this->total++;
 
@@ -127,17 +122,19 @@ class JheckdocGenerate extends Command
                     $line = str_replace("\n", '', $line);
                     $json = json_decode($line);
 
-                    try{
+                    try {
                         $jsonRoute = $json->route;
                         $method = strtolower($json->method);
+
                         unset($json->route);
                         unset($json->method);
                         $this->jheckdoc['routes'][$jsonRoute][$method] = $json;
-                        $this->line("✓ $jsonRoute");
+                        $this->line("[✓] $jsonRoute");
                         $this->success++;
-                    }
-                    catch(\Exception $e){
-                        $this->error($e->getMessage());
+                    } catch (\Exception $e) {
+                        // $this->error($e->getMessage());
+                        $error = substr(str_replace('  ', '', $line), 0 , 100);
+                        $this->error("[X] Failed to parse json: {$error}...");
                         $this->failed++;
                     }
                 }

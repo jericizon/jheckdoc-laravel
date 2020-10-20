@@ -33,7 +33,7 @@
 
             <div class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
               <span class="inline-flex items-center uppercase">
-                {{group}}
+                {{group.split('_').join(' ').split('-').join(' ')}}
               </span>
             </div>
 
