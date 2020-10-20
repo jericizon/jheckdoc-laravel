@@ -1,7 +1,7 @@
 <template>
 <div
   class="my-5 relative"
-  v-if="headers"
+  v-if="hasData"
 >
   <Card title="Headers">
     <button
@@ -59,6 +59,11 @@ export default {
     return {
       showTable: true,
     };
+  },
+  computed: {
+    hasData() {
+      return Object.keys(this.headers).length;
+    },
   },
 };
 </script>

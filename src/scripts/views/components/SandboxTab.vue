@@ -24,27 +24,31 @@
         <div class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-500 bg-gray-100 border" v-html="requestHtmlUrl"></div>
       </div>
 
-      <h4 class="mt-5 mb-2 uppercase text-base font-semibold text-gray-600">Headers</h4>
+      <template v-if="hasHeaders">
 
-      <div
-        class="py-2 p-4"
-        v-for="(header, key) in inputHeaders"
-        :key="`header-${key}`"
-      >
-        <label class="block text-sm">
-          <span class="capitalize text-gray-700 text-gray-400">
-            {{key}}:
-          </span>
-          <input
-            class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 bg-gray-100 border form-input"
-            v-model="inputHeaders[key]"
-            :placeholder="key"
-          >
-        </label>
+        <h4 class="mt-5 mb-2 uppercase text-base font-semibold text-gray-600">Headers</h4>
 
-      </div>
+        <div
+          class="py-2 p-4"
+          v-for="(header, key) in inputHeaders"
+          :key="`header-${key}`"
+        >
+          <label class="block text-sm">
+            <span class="capitalize text-gray-700 text-gray-400">
+              {{key}}:
+            </span>
+            <input
+              class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 bg-gray-100 border form-input"
+              v-model="inputHeaders[key]"
+              :placeholder="key"
+            >
+          </label>
 
-      <template v-if="parameters">
+        </div>
+
+      </template>
+
+      <template v-if="hasParameters">
         <h4 class="mt-5 mb-2 uppercase text-base font-semibold text-gray-600">Parameters</h4>
 
         <div
@@ -85,6 +89,8 @@
             This field is required
           </span>
         </div>
+
+      </template>
 
         <button
           class="my-10 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
@@ -135,7 +141,6 @@
               <li class="mb-1 text-gray-700 text-sm font-medium">Status code: <span class="font-normal">{{serverResponseCode}}</span></li>
             </ul>
           </Card>
-        </template>
       </template>
     </template>
 
@@ -239,6 +244,12 @@ export default {
         return item;
       });
       return params.join('/');
+    },
+    hasHeaders() {
+      return Object.keys(this.headers).length;
+    },
+    hasParameters() {
+      return Object.keys(this.parameters).length;
     },
   },
   methods: {

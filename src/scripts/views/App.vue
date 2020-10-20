@@ -74,8 +74,8 @@
   <aside
     class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white dark:bg-gray-800 md:hidden"
     v-show="isSideMenuOpen"
-    @click.away="closeSideMenu"
-    @keydown.escape="closeSideMenu"
+    @click.away="isSideMenuOpen = !isSideMenuOpen"
+    @keydown.escape="isSideMenuOpen = !isSideMenuOpen"
   >
     <div class="py-4 text-gray-500 dark:text-gray-400">
       <router-link
@@ -415,20 +415,8 @@ export default {
       'setActiveMethod',
       'setServerUrl',
     ]),
-    closeSideMenu() {
-
-    },
     toggleSideMenu() {
       this.isSideMenuOpen = !this.isSideMenuOpen;
-    },
-    togglePagesMenu() {
-
-    },
-    toggleTheme() {
-
-    },
-    toggleNotificationsMenu() {
-
     },
   },
   mounted() {

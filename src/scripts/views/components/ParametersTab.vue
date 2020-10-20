@@ -1,7 +1,7 @@
 <template>
 <div
   class="my-5 relative"
-  v-if="parameters"
+  v-if="hasData"
 >
   <Card title="Parameters">
     <button
@@ -10,12 +10,13 @@
     >
       {{ showTable ? 'Hide' : 'Show'}}
     </button>
+
     <template
       v-if="showTable"
     >
-      <table
-        class="w-full whitespace-no-wrap mb-10"
-      >
+
+      <table class="w-full whitespace-no-wrap mb-10">
+
         <thead>
           <tr
             class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase"
@@ -75,6 +76,11 @@ export default {
     return {
       showTable: true,
     };
+  },
+  computed: {
+    hasData() {
+      return Object.keys(this.parameters).length;
+    },
   },
 };
 </script>
