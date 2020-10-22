@@ -290,20 +290,35 @@ export default {
       // clear old value
       this.setSandboxResponses({
         route: this.activeRoute,
+        method: this.activeMethod,
         response: {},
       });
 
       this.setSandboxHeaderInput({
         route: this.activeRoute,
+        method: this.activeMethod,
         headers: inputHeaders,
       });
 
       this.setSandboxParameterInput({
         route: this.activeRoute,
+        method: this.activeMethod,
         parameters: data,
       });
 
       let axiosRequest = '';
+
+      if ((typeof headers.headers['Content-Type'] !== 'undefined' && headers.headers['Content-Type'] === 'application/x-www-form-urlencoded')
+          || (typeof headers.headers['content-type'] !== 'undefined' && headers.headers['content-type'] === 'application/x-www-form-urlencoded')
+      ) {
+        const params = new URLSearchParams();
+        Object.keys(data).map((key) => {
+          params.append(key, data[key]);
+          return data[key];
+        });
+        data = params;
+      }
+
 
       switch (method.toLowerCase()) {
         case 'delete':
@@ -316,25 +331,12 @@ export default {
           axiosRequest = axios.put(this.requestUrl, data, headers);
           break;
         case 'get':
-
           axiosRequest = axios.get(this.requestUrl, {
             headers: inputHeaders,
             params: data,
           });
           break;
         case 'post':
-
-          if ((typeof headers.headers['Content-Type'] !== 'undefined' && headers.headers['Content-Type'] === 'application/x-www-form-urlencoded')
-            || (typeof headers.headers['content-type'] !== 'undefined' && headers.headers['content-type'] === 'application/x-www-form-urlencoded')
-          ) {
-            const params = new URLSearchParams();
-            Object.keys(data).map((key) => {
-              params.append(key, data[key]);
-              return data[key];
-            });
-            data = params;
-          }
-
           axiosRequest = axios.post(this.requestUrl, data, headers);
           break;
         default:
@@ -355,6 +357,7 @@ export default {
 
           this.setSandboxResponses({
             route: this.activeRoute,
+            method: this.activeMethod,
             response,
             performance: execTime,
           });
@@ -367,6 +370,7 @@ export default {
             const execTime = `${total}s`;
             this.setSandboxResponses({
               route: this.activeRoute,
+              method: this.activeMethod,
               response: error.response,
               performance: execTime,
             });
@@ -419,7 +423,7 @@ export default {
       this.refreshState();
     },
     sandboxResponses(val) {
-      console.log(val, this.getActiveRouteServerResponse);
+      // console.log(val, this.getActiveRouteServerResponse);
     },
   },
 };
