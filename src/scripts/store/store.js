@@ -2,7 +2,8 @@ import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import Sandbox from './sandbox';
+import sandbox from './sandbox';
+import globalOptions from './global-options';
 
 Vue.use(Vuex);
 
@@ -10,7 +11,8 @@ const assetUrl = typeof window.__JHECKDOC__ !== 'undefined' ? window.__JHECKDOC_
 
 export default new Vuex.Store({
   modules: {
-    sandbox: Sandbox,
+    sandbox,
+    globalOptions,
   },
   state: {
     assetUrl,
@@ -54,16 +56,19 @@ export default new Vuex.Store({
         jheckdoc, main_url, info, routes,
       } = item;
 
-      const { servers } = info;
 
       commit('setJheckDocVersion', jheckdoc || '1.0.0');
       commit('setMainUrl', main_url || '');
       commit('setAppInfo', info, {});
-      // commit('setServerUrl', server_url || '');
       commit('setRoutes', routes || {});
 
-      if (servers.length) {
-        commit('setServerUrl', servers[0].url);
+      if (typeof info === 'undefined') {
+        commit('setServerUrl', '');
+      } else {
+        const { servers } = info;
+        if (typeof servers !== 'undefined' && servers.length) {
+          commit('setServerUrl', servers[0].url);
+        }
       }
     },
   },
@@ -111,6 +116,6 @@ export default new Vuex.Store({
       if (!state.activeRoute) return '';
       return `${state.serverUrl}${state.activeRoute}`;
     },
-    getServers: state => state.appInfo.servers,
+    getServers: state => (typeof state.appInfo !== 'undefined' ? state.appInfo.servers : {}),
   },
 });

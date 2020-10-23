@@ -38,7 +38,7 @@
               {{key}}:
             </span>
             <input
-              class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 bg-gray-100 border form-input"
+              class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 border form-input"
               v-model="inputHeaders[key]"
               :placeholder="key"
             >
@@ -61,7 +61,7 @@
           </span>
           <template v-if="parameter.options">
             <select
-              class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 bg-gray-100 border form-input"
+              class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 border form-input"
               v-model="inputParameters[key]"
               :class="{'form-incomplete': isRequired(key) && !inputParameters[key], 'border-red-500' : isRequired(key) && !inputParameters[key] && showValidationError}"
             >
@@ -76,7 +76,7 @@
 
           <template v-else>
             <input
-              class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 bg-gray-100 border form-input"
+              class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 border form-input"
               :placeholder="key"
               v-model="inputParameters[key]"
               :class="{'form-incomplete': isRequired(key) && !inputParameters[key], 'border-red-500' : isRequired(key) && !inputParameters[key] && showValidationError}"
@@ -193,6 +193,9 @@ export default {
       'getActiveRouteServerResponse',
       'getActiveRouteHeaderInput',
       'getActiveRouteParameterInput',
+    ]),
+    ...mapGetters('globalOptions', [
+      'getGlobalHeaderInput',
     ]),
     serverResponseCode() {
       return typeof this.getActiveRouteServerResponse.status !== 'undefined'
@@ -395,9 +398,18 @@ export default {
         Object.keys(headers).map((key) => {
           const header = headers[key];
 
-          let headerValue = header.value;
+          let headerValue;
 
-          if (typeof this.getActiveRouteHeaderInput[key] !== 'undefined') headerValue = this.getActiveRouteHeaderInput[key];
+          if (typeof this.getActiveRouteHeaderInput[key] !== 'undefined') {
+            // normal input
+            headerValue = this.getActiveRouteHeaderInput[key];
+          } else if (typeof this.getGlobalHeaderInput(key) !== 'undefined') {
+            // global headers
+            headerValue = this.getGlobalHeaderInput(key);
+          } else {
+            // default value
+            headerValue = header.value;
+          }
 
           return this.$set(this.inputHeaders, key, headerValue);
         });

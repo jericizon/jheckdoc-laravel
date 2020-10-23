@@ -164,30 +164,25 @@
           <div
             class="relative w-full max-w-xl mr-6 focus-within:text-purple-500"
           >
-            <!-- <div class="absolute inset-y-0 flex items-center pl-2">
-              <svg
-                class="w-4 h-4"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </div>
             <input
-              class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
+              class="p-2 w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
               type="text"
-              placeholder="Search for projects"
-              aria-label="Search"
-            /> -->
+              v-model="fetchDataUrl"
+            />
           </div>
         </div>
-          <!-- Profile menu -->
-        <ul>
+
+        <ul class="flex items-center">
+           <li class="relative border-gray-500 border-r pr-3 relative">
+              <button
+                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                @click="showGlobalOptions = !showGlobalOptions"
+                @keydown.escape="showGlobalOptions = false"
+              >
+                Global options
+              </button>
+          </li>
+
           <li class="relative">
 
             <button
@@ -227,14 +222,14 @@
                     v-if="serverUrl === server.url"
                     aria-hidden="true" class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
                   ></span>
-                  <span class="block w-full py-1 font-semibold transition-colors duration-150 rounded-md">
+                  <span class="block text-sm w-full py-1 font-semibold transition-colors duration-150 rounded-md">
                     {{server.url}}
                   </span>
                   <span
                     v-if="server.description"
-                    class="px-2 text-sm"
+                    class="block px-2 text-sm"
                   >
-                    {{server.description}}
+                    * {{server.description}}
                   </span>
                 </li>
               </ul>
@@ -246,10 +241,16 @@
     <main class="h-full overflow-y-scroll">
       <div class="container px-6 mx-auto grid">
 
-        <template v-if="showInfo">
-          <h2
-            class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
-          >
+        <GlobalOptions v-if="showGlobalOptions"></GlobalOptions>
+
+        <template v-if="failedToLoadJson">
+          <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Failed to load json file. <span class="mb-1 text-gray-500 text-sm">({{fetchDataUrl}})</span>
+          </h2>
+        </template>
+
+        <template v-else-if="showInfo">
+          <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             {{appInfo.title}}
             <span
               v-if="appInfo.version"
@@ -266,8 +267,8 @@
           <p>
             <a
               class="mb-1 text-purple-600 text-base font-medium"
-              :href="`mailto:${appInfo.contact}`
-            ">{{appInfo.contact}}</a>
+              :href="`mailto:${appInfo.contact}`"
+            >{{appInfo.contact}}</a>
           </p>
 
         </template>
@@ -324,6 +325,9 @@ import ParametersTab from './components/ParametersTab.vue';
 import ResponsesTab from './components/ResponsesTab.vue';
 import HeadersTab from './components/HeadersTab.vue';
 import SandboxTab from './components/SandboxTab.vue';
+import GlobalOptions from './components/GlobalOptions.vue';
+
+let fetchUrlTimeout;
 
 export default {
   name: 'App',
@@ -332,6 +336,7 @@ export default {
     ResponsesTab,
     HeadersTab,
     SandboxTab,
+    GlobalOptions,
   },
   data() {
     return {
@@ -347,6 +352,9 @@ export default {
       menuIsActive: false,
       isSideMenuOpen: false,
       showServerOptions: false,
+      showGlobalOptions: false,
+      fetchDataUrl: '',
+      failedToLoadJson: false,
     };
   },
   computed: {
@@ -421,28 +429,7 @@ export default {
   },
   mounted() {
     this.jheckDocLogo = base64Logo();
-    const axiosRequest = {
-      method: 'GET',
-      url: `${this.assetUrl}/fetchdata.json`,
-    };
-    axios(axiosRequest)
-      .then((response) => {
-        // console.log(response.data);
-        this.updateInitStates(response.data);
-      })
-      .catch((error) => {
-
-      })
-      .then(() => {
-        this.$nextTick(() => {
-          const { query } = this.$route;
-          this.setActiveRoute(query.url);
-          this.setActiveMethod(query.method);
-
-
-          this.activeMenu = `${query.url}__${query.method}`;
-        });
-      });
+    this.fetchDataUrl = `${this.assetUrl}/fetchdata.json`;
   },
   watch: {
     $route(to, from) {
@@ -461,6 +448,34 @@ export default {
     },
     getParameters(val) {
       // console.log(val);
+    },
+    fetchDataUrl(fetchDataUrl) {
+      clearTimeout(fetchUrlTimeout);
+      fetchUrlTimeout = setTimeout(() => {
+        const axiosRequest = {
+          method: 'GET',
+          url: fetchDataUrl,
+        };
+        axios(axiosRequest)
+          .then((response) => {
+            // console.log(response.data);
+            this.failedToLoadJson = false;
+            this.updateInitStates(response.data);
+            this.$nextTick(() => {
+              const { query } = this.$route;
+              this.setActiveRoute(query.url);
+              this.setActiveMethod(query.method);
+              this.activeMenu = `${query.url}__${query.method}`;
+            });
+          })
+          .catch((error) => {
+            this.failedToLoadJson = true;
+            this.updateInitStates({});
+          })
+          .then(() => {
+
+          });
+      }, 500);
     },
   },
 };
