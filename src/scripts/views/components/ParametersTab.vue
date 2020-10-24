@@ -41,24 +41,25 @@
         </tbody>
       </table>
 
-      <div
-        class="m-3"
-        v-for="(params, key) in parameters"
-        :key="`parameter-description-${key}`"
-      >
-        <h4 class="mb-2 text-base font-semibold text-gray-500">{{key}}</h4>
-        <ul
-          class="border-b pb-5"
+      <div id="parameter-descriptions">
+        <div
+          class="m-3 border-b"
+          v-for="(params, key) in parameters"
+          :key="`parameter-description-${key}`"
         >
-          <li class="mb-1 text-gray-700 text-sm font-medium">Type: <span class="font-normal">{{params.type}}</span></li>
-          <li class="mb-1 text-gray-700 text-sm font-medium">Required: <span class="font-normal">{{params.required ? 'true' : 'false'}}</span></li>
-          <li class="mb-1 text-gray-700 text-sm font-medium" v-if="params.description">Description: <span class="font-normal">{{params.description}}</span></li>
-          <li
-            v-if="params.options"
-            class="mb-1 text-gray-700 text-sm font-medium">Options: <span class="bg-yellow-300 font-normal px-2">{{params.options.join(', ')}}</span>
-          </li>
+          <h4 class="mb-2 text-base font-semibold text-gray-500">{{key}}</h4>
+          <ul class="pb-5">
+            <li class="mb-1 text-gray-700 text-sm font-medium">Type: <span class="font-normal">{{params.type}}</span></li>
+            <li class="mb-1 text-gray-700 text-sm font-medium">Required: <span class="font-normal">{{params.required ? 'true' : 'false'}}</span></li>
+            <li class="mb-1 text-gray-700 text-sm font-medium" v-if="JSON.stringify(params.value)">Default: <span class="font-normal">{{params.value}}</span></li>
+            <li class="mb-1 text-gray-700 text-sm font-medium" v-if="params.description">Description: <span class="font-normal">{{params.description}}</span></li>
+            <li
+              v-if="params.options"
+              class="mb-1 text-gray-700 text-sm font-medium">Options: <span class="bg-yellow-300 font-normal px-2">{{params.options.join(', ')}}</span>
+            </li>
 
-        </ul>
+          </ul>
+        </div>
       </div>
     </template>
   </Card>
@@ -86,4 +87,9 @@ export default {
 </script>
 
 <style lang="scss">
+#parameter-descriptions {
+  > div:last-child{
+    border-bottom: none;
+  }
+}
 </style>

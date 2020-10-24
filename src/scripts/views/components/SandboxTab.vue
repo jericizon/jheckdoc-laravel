@@ -59,7 +59,30 @@
           <span class="text-gray-700 text-gray-400">
             {{key}}<span v-if="isRequired(key)" class="text-red text-sm font-bold">*</span>:
           </span>
-          <template v-if="parameter.options">
+
+          <template v-if="parameter.type === 'bool'">
+
+            <div class="block mt-1">
+              <label class="mr-3 cursor-pointer">
+                <input
+                  type="radio"
+                  v-model="inputParameters[key]"
+                  v-bind:value="'true'"
+                > True
+              </label>
+              <label class="cursor-pointer">
+                <input
+                  type="radio"
+                  v-model="inputParameters[key]"
+                  v-bind:value="'false'"
+                > False
+              </label>
+            </div>
+
+
+          </template>
+
+          <template v-else-if="parameter.options">
             <select
               class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 border form-input"
               v-model="inputParameters[key]"
@@ -282,6 +305,15 @@ export default {
       const execStart = performance.now();
 
       let data = JSON.parse(JSON.stringify(this.inputParameters));
+
+      Object.keys(data).map((index) => {
+        // convert to boolean values
+        if (data[index] === 'false') data[index] = false;
+        if (data[index] === 'true') data[index] = true;
+
+        return index;
+      });
+
       const inputHeaders = JSON.parse(JSON.stringify(this.inputHeaders));
       const headers = { headers: inputHeaders };
       const method = this.activeMethod;
@@ -419,8 +451,12 @@ export default {
         Object.keys(parameters).map((key) => {
           const parameter = parameters[key];
           let parameterValue = parameter.value;
-
-          if (typeof this.getActiveRouteParameterInput[key] !== 'undefined') parameterValue = this.getActiveRouteParameterInput[key];
+          // console.log('parameter', parameter);
+          if (typeof this.getActiveRouteParameterInput[key] !== 'undefined') {
+            parameterValue = this.getActiveRouteParameterInput[key];
+          } else if (parameter.type === 'bool') {
+            parameterValue = typeof parameter.value !== 'undefined' ? parameter.value : 'false';
+          }
 
           return this.$set(this.inputParameters, key, parameterValue);
         });
