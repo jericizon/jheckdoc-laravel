@@ -35,13 +35,20 @@
         >
           <label class="block text-sm">
             <span class="capitalize text-gray-700 text-gray-400">
-              {{key}}:
+              {{key}}<span v-if="isRequired(key, 'headers')" class="text-red text-sm font-bold">*</span>:
             </span>
             <input
               class="block w-full mt-1 p-2 text-sm rounded-lg text-gray-900 border form-input"
               v-model="inputHeaders[key]"
               :placeholder="key"
+              :class="{'form-incomplete': isRequired(key, 'headers') && !inputHeaders[key], 'border-red-500' : isRequired(key, 'headers') && !inputHeaders[key] && showValidationError}"
             >
+            <span
+              class="text-xs text-red-600 text-red-400"
+              v-if="isRequired(key, 'headers') && !inputHeaders[key] && showValidationError"
+            >
+              This field is required
+            </span>
           </label>
 
         </div>
@@ -289,7 +296,10 @@ export default {
 
       return input;
     },
-    isRequired(index) {
+    isRequired(index, type = '') {
+      if (type === 'headers') {
+        return !!(typeof this.headers[index] !== 'undefined' && typeof this.headers[index].required !== 'undefined' && this.headers[index].required);
+      }
       return !!(typeof this.parameters[index] !== 'undefined' && typeof this.parameters[index].required !== 'undefined' && this.parameters[index].required);
     },
     executeRequest() {
