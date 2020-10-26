@@ -23,6 +23,7 @@ export default new Vuex.Store({
     routes: {},
     activeRoute: '',
     activeMethod: '',
+    searchRoute: '',
   },
   mutations: {
     setAssetUrl(state, item) {
@@ -48,6 +49,9 @@ export default new Vuex.Store({
     },
     setActiveMethod(state, item) {
       state.activeMethod = item;
+    },
+    setSearchRoute(state, item) {
+      state.searchRoute = item;
     },
   },
   actions: {
@@ -95,11 +99,14 @@ export default new Vuex.Store({
             });
           } else {
             if (typeof menu[route.group] === 'undefined') menu[route.group] = [];
-            menu[route.group].push({
-              url: routeUrl,
-              name: route.name,
-              method,
-            });
+
+            if (!state.searchRoute || route.name.toLowerCase().includes(state.searchRoute.toLowerCase())) {
+              menu[route.group].push({
+                url: routeUrl,
+                name: route.name,
+                method,
+              });
+            }
           }
         });
       });

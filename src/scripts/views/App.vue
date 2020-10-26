@@ -20,7 +20,30 @@
         >
         <span class="ml-2">Jheck Doc</span>
       </router-link>
-      <ul class="mt-6">
+      <div class="relative w-full max-w-xl mt-6 px-5">
+        <div class="absolute inset-y-0 flex items-center pl-2">
+          <svg
+            class="w-4 h-4"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+        <input
+          class="border-2 pl-8 p-2 w-full text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
+          type="text"
+          placeholder="Search..."
+          v-model="searchRoute"
+          @input="updateSearchRoute"
+        />
+      </div>
+      <ul>
         <li
           v-for="(routes, group) in getMenuLinks"
           :key="`group-menu-${group}`"
@@ -42,9 +65,9 @@
               aria-label="submenu"
             >
               <li
-                class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 v-for="(route, key) in routes"
                 :key="`menu-${key}`"
+                class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
               >
                 <span
                   v-if="activeMenu === `${route.url}__${route.method}`"
@@ -90,6 +113,31 @@
         >
         <span class="ml-2">Jheck Doc</span>
       </router-link>
+
+      <div class="relative w-full max-w-xl mt-6 px-5">
+        <div class="absolute inset-y-0 flex items-center pl-2">
+          <svg
+            class="w-4 h-4"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+        <input
+          class="border-2 pl-8 p-2 w-full text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
+          type="text"
+          placeholder="Search..."
+          v-model="searchRoute"
+          @input="updateSearchRoute"
+        />
+      </div>
+
       <ul class="mt-6">
         <li
           v-for="(routes, group) in getMenuLinks"
@@ -328,6 +376,7 @@ import SandboxTab from './components/SandboxTab.vue';
 import GlobalOptions from './components/GlobalOptions.vue';
 
 let fetchUrlTimeout;
+let setSearchRouteTimeout;
 
 export default {
   name: 'App',
@@ -355,6 +404,7 @@ export default {
       showGlobalOptions: false,
       fetchDataUrl: '',
       failedToLoadJson: false,
+      searchRoute: '',
     };
   },
   computed: {
@@ -422,9 +472,16 @@ export default {
       'setActiveRoute',
       'setActiveMethod',
       'setServerUrl',
+      'setSearchRoute',
     ]),
     toggleSideMenu() {
       this.isSideMenuOpen = !this.isSideMenuOpen;
+    },
+    updateSearchRoute() {
+      clearTimeout(setSearchRouteTimeout);
+      setSearchRouteTimeout = setTimeout(() => {
+        this.setSearchRoute(this.searchRoute);
+      }, 300);
     },
   },
   mounted() {
