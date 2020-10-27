@@ -8,7 +8,13 @@
     <a href="#" target="_blank"><img src="https://img.shields.io/github/last-commit/google/skia.svg?style=flat" alt="GitHub last commit"></a>
 </p>
 
-Laravel api document generator
+
+<h3 align="center">Simple laravel api document generator</h3>
+
+<br>
+<br>
+
+<p align="center"><img width="800" src="https://github.com/jericizon/jheckdoc-laravel/blob/master/assets/jheckdoc-preview.jpg" alt="Dashboard preview"></p>
 
 ## Installation
 
