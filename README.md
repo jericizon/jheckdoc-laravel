@@ -1,7 +1,6 @@
 <p align="center"><a href="https://github.com/jericizon/jheckdoc-laravel" target="_blank" rel="noopener noreferrer"><img width="150" src="https://github.com/jericizon/jheckdoc-laravel/blob/master/assets/logo/jheckdoc-logo.jpg" alt="JheckDoc Laravel logo"></a></p>
 
-# Jheckdoc laravel
-
+<h2 align="center">Jheckdoc laravel</h2>
 
 <p align="center">
     <a href="https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs" target="_blank"><img src="https://img.shields.io/apm/l/atomic-design-ui.svg?" alt="MIT License"></a>
@@ -9,7 +8,7 @@
 </p>
 
 
-<h3 align="center">Simple laravel api document generator</h3>
+<p align="center">Simple laravel api document generator</p>
 
 <br>
 <br>
