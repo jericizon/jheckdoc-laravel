@@ -1,9 +1,12 @@
+<p align="center"><a href="https://github.com/jericizon/jheckdoc-laravel" target="_blank" rel="noopener noreferrer"><img width="150" src="https://github.com/jericizon/jheckdoc-laravel/blob/master/assets/logo/jheckdoc-logo.jpg" alt="JheckDoc Laravel logo"></a></p>
+
 # Jheckdoc laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/jericizon/jheckdoc-laravel.svg?style=flat-square)](https://packagist.org/packages/jericizon/jheckdoc-laravel)
-[![Build Status](https://img.shields.io/travis/jericizon/jheckdoc-laravel/master.svg?style=flat-square)](https://travis-ci.org/jericizon/jheckdoc-laravel)
-[![Quality Score](https://img.shields.io/scrutinizer/g/jericizon/jheckdoc-laravel.svg?style=flat-square)](https://scrutinizer-ci.com/g/jericizon/jheckdoc-laravel)
-[![Total Downloads](https://img.shields.io/packagist/dt/jericizon/jheckdoc-laravel.svg?style=flat-square)](https://packagist.org/packages/jericizon/jheckdoc-laravel)
+
+<p align="center">
+    <a href="https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs" target="_blank"><img src="https://img.shields.io/apm/l/atomic-design-ui.svg?" alt="MIT License"></a>
+    <a href="#" target="_blank"><img src="https://img.shields.io/github/last-commit/google/skia.svg?style=flat" alt="GitHub last commit"></a>
+</p>
 
 Laravel api document generator
 
@@ -23,10 +26,44 @@ Generate json file
 php artisan jheckdoc:generate
 ```
 
-### Testing
+### Sample annotation
 
-``` bash
-composer test
+```
+/*@jheckdoc
+    {
+        "method" : "POST",
+        "route" : "/v1/users/login",
+        "name":"User login",
+        "description": "Login to get authorization token.",
+        "group":"user",
+        "headers":{
+            "Content-Type": {
+                "required": true,
+                "value":"application/x-www-form-urlencoded"
+            }
+        },
+        "params" : {
+            "email" :{
+                "type":"string",
+                "description": "Enter E-mail address",
+                "required" : true
+            },
+            "password" :{
+                "type":"string",
+                "description": "Enter Password",
+                "required" : true
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "401": {
+                "description": "Unauthenticated"
+            }
+        }
+    }
+*/
 ```
 
 ### Changelog
