@@ -17,10 +17,10 @@
 
 ## Installation
 
-You can install the package via composer: - soon
+You can install the package via composer
 
 ```bash
-composer require jericizon/jheckdoc-laravel
+composer require jheckdoc/jheckdoc-laravel
 ```
 
 ## Usage
