@@ -31,7 +31,22 @@ Generate json file
 php artisan jheckdoc:generate
 ```
 
+### Parameters
+
+| Name                  |  Type  |  Description |
+| --------------------- | ------ |--------------|
+| `method`              | String | Your desired route method, Sample `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS` |
+| `route`               | String | Your api endpoint. Note: no need to put the full ur.      |
+| `name`                | String | Enter desire name for your endpoint      |
+| `description`         | String | Description of your endpoint |
+| `headers`             | Object | For custom headers |
+| `params`              | Object | Enter parameters for your endpoint |
+| `responses`           | Object | Server responses |
+
+
 ### Sample annotation
+
+Please see [Sample annotations](annotations) for more.
 
 ```
 /*@jheckdoc
