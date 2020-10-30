@@ -35,11 +35,11 @@ php artisan jheckdoc:generate
 
 | Name                  |  Type  |  Description |
 | --------------------- | ------ |--------------|
-| `@jheckdocInfo`       | String | This will be the details of api documentation. [Sample header](annotations/ApiInformation.php) |
+| `@jheckdocInfo`       | String | TThis is required for details of api documentation. [Sample header](annotations/ApiInformation.php) |
 | `@jheckdoc`           | String | This is required to add on top of each codeblocks. [Sample annotation](annotations/BasicAnnotation.php) |
 | `method`              | String | Your desired route method, Sample `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS` |
-| `route`               | String | Your api endpoint. Note: no need to put the full ur.      |
-| `name`                | String | Enter desire name for your endpoint      |
+| `route`               | String | Your api endpoint. Note: no need to put the full url |
+| `name`                | String | Enter desired name for your endpoint |
 | `description`         | String | Description of your endpoint |
 | `headers`             | Object | For custom headers |
 | `params`              | Object | Enter parameters for your endpoint |
@@ -71,6 +71,7 @@ php artisan jheckdoc:generate
 
 ### Sample annotation
 
+Each code block requires a valid json format.
 Please see [Sample annotations](annotations) for more.
 
 ```
