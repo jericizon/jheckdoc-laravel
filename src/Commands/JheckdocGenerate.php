@@ -46,6 +46,8 @@ class JheckdocGenerate extends Command
 
         $files = $this->getFiles(config('jheckdoc.controllers'));
 
+        if(!$files) return $this->error("Unable to scan files under diretory: " .config('jheckdoc.controllers') );
+
         $this->createJheckDocApp();
 
         // scan and read annotations
@@ -67,6 +69,8 @@ class JheckdocGenerate extends Command
     private function getFiles($dir, &$results = array())
     {
         $files = scandir($dir);
+
+        if(count($files) === 0) return;
 
         foreach ($files as $key => $value) {
             $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
