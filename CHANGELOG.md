@@ -2,6 +2,10 @@
 
 All notable changes to `jheckdoc` will be documented in this file
 
+## v1.1.1
+
+* fix get parameters only
+
 ## v1.1.0
 
 * added public config in readme.md
