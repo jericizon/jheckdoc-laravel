@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -62,27 +63,34 @@ class SampleAnnotations extends Controller
     }
     */
 
+    public function userLogin(Request $req)
+    {
+        $req->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sample user found',
+            'results' => [
+                'email' => $req->email,
+                'password' => $req->password,
+            ]
+        ]);
+    }
+
     /*@jheckdoc
     {
-        "name":"Login get",
-        "route" : "/users/login",
+        "name":"Get user details",
+        "route" : "/users/details",
         "method" : "GET",
-        "description": "Login with get method",
-        "headers":{
-            "Content-Type": {
-                "required": true,
-                "value":"application/x-www-form-urlencoded"
-            }
-        },
+        "description": "Get user details",
+        "headers":{},
         "params" : {
             "email" :{
                 "type":"string",
                 "description": "Enter E-mail address",
-                "required" : true
-            },
-            "password" :{
-                "type":"string",
-                "description": "Enter Password",
                 "required" : true
             }
         },
@@ -99,6 +107,17 @@ class SampleAnnotations extends Controller
         }
     }
     */
+
+    public function userDetails($email)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => 'Sample user found',
+            'results' => [
+                'email' => $email,
+            ]
+        ]);
+    }
 
     /*@jheckdoc
     {
@@ -130,4 +149,21 @@ class SampleAnnotations extends Controller
     }
     */
 
+    public function userRegister(Request $req)
+    {
+        $req->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Demo register user',
+            'results' => [
+                'email' => $req->email,
+                'password' => $req->password,
+                'remember' => (bool) $req->remember,
+            ]
+        ]);
+    }
 }

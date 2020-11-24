@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a73cb2f7fc0d2033a3423d05e714107",
+    "content-hash": "1dd1e0819a1df7270aa8acccf8af76ca",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -759,16 +759,16 @@
         },
         {
             "name": "jheckdoc/jheckdoc-laravel",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jericizon/jheckdoc-laravel.git",
-                "reference": "dfd614101e0728460b42ce47357526c46806e468"
+                "reference": "632488186eb6fe257d78c399f7adcd40a85f35aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jericizon/jheckdoc-laravel/zipball/dfd614101e0728460b42ce47357526c46806e468",
-                "reference": "dfd614101e0728460b42ce47357526c46806e468",
+                "url": "https://api.github.com/repos/jericizon/jheckdoc-laravel/zipball/632488186eb6fe257d78c399f7adcd40a85f35aa",
+                "reference": "632488186eb6fe257d78c399f7adcd40a85f35aa",
                 "shasum": ""
             },
             "require": {
@@ -814,7 +814,7 @@
                 "jheckdoc-laravel",
                 "laravel"
             ],
-            "time": "2020-11-24T08:59:16+00:00"
+            "time": "2020-11-24T09:29:25+00:00"
         },
         {
             "name": "laravel/framework",
@@ -4262,16 +4262,16 @@
         },
         {
             "name": "fakerphp/faker",
-            "version": "v1.11.0",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "f228dc5112bafc14c77d40a2acc0c48058e184b0"
+                "reference": "9aa6c9e289860951e6b4d010c7a841802d015cd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/f228dc5112bafc14c77d40a2acc0c48058e184b0",
-                "reference": "f228dc5112bafc14c77d40a2acc0c48058e184b0",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/9aa6c9e289860951e6b4d010c7a841802d015cd8",
+                "reference": "9aa6c9e289860951e6b4d010c7a841802d015cd8",
                 "shasum": ""
             },
             "require": {
@@ -4306,7 +4306,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2020-11-15T20:27:00+00:00"
+            "time": "2020-11-23T09:33:08+00:00"
         },
         {
             "name": "filp/whoops",

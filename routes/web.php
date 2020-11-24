@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/users/login', 'SampleAnnotations@userLogin');
+Route::post('/users/register', 'SampleAnnotations@userRegister');
+Route::get('/users/{email}', 'SampleAnnotations@userDetails');
+
+
 Route::get('/', function () {
     return redirect(url(config('jheckdoc.url')));
     // return view('welcome');
