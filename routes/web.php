@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+URL::forceScheme('https');
+
 Route::post('/users/login', 'SampleAnnotations@userLogin');
 Route::post('/users/register', 'SampleAnnotations@userRegister');
 Route::get('/users/{email}', 'SampleAnnotations@userDetails');
