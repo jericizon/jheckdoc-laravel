@@ -31,6 +31,7 @@ class JheckdocGenerate extends Command
     protected $success = 0;
     protected $failed = 0;
     protected $total = 0;
+    protected $jheckdocInfoIsMissing = true;
 
     /**
      * Execute the console command.
@@ -64,6 +65,10 @@ class JheckdocGenerate extends Command
             ['-', '-'],
             ['Total', $this->total],
         ]);
+
+        if($this->jheckdocInfoIsMissing){
+            $this->comment('Warning: one of the requirement is missing [@jheckdocInfo]. https://github.com/jericizon/jheckdoc-laravel/tree/demo-page#api-documentation-detail-information');
+        }
     }
 
     private function getFiles($dir, &$results = array())
@@ -91,28 +96,24 @@ class JheckdocGenerate extends Command
         if (!file_exists($file) || !is_file($file)) return;
 
         $tokens = token_get_all(file_get_contents($file));
-        $success = 0;
-        $failed = 0;
-        $total = 0;
+
         foreach ($tokens as $token) {
             if ($token[0] == T_COMMENT || $token[0] == T_DOC_COMMENT) {
                 $line = trim($token[1], ' ');
 
-
                 if (stripos($line, '@jheckdocInfo') !== false) {
-
                     try {
                         $line = str_replace('/*@jheckdocInfo', '', $line);
                         $line = str_replace('*/', '', $line);
                         $line = str_replace("\n", '', $line);
                         $json = json_decode($line);
 
-
                         if (is_null($json)) {
                             $this->error('@jheckdocInfo detected, but failed to parse the json.');
                         } else {
-                            $this->line("[X] @jheckdocInfo added");
+                            $this->line("[✓] @jheckdocInfo added");
                             $this->jheckdoc['info'] = $json;
+                            $this->jheckdocInfoIsMissing = false;
                         }
                     } catch (\Exception $e) {
                         $this->error($e->getMessage());
