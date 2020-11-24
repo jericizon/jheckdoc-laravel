@@ -265,7 +265,20 @@ export default {
         }
         return item;
       });
-      return params.join('/');
+
+      const requestHtmlUrl = params.join('/');
+
+      if (this.isFormUrlEncoded) {
+        const data = JSON.parse(JSON.stringify(this.inputParameters));
+        const getParams = new URLSearchParams();
+        Object.keys(data).map((key) => {
+          getParams.append(key, data[key]);
+          return data[key];
+        });
+        return `${requestHtmlUrl}?${getParams}`;
+      }
+
+      return requestHtmlUrl;
     },
     requestUrl() {
       let params = this.getRouteLink.split('/');
@@ -283,6 +296,18 @@ export default {
     },
     hasParameters() {
       return Object.keys(this.parameters).length;
+    },
+    isFormUrlEncoded() {
+      const inputHeaders = JSON.parse(JSON.stringify(this.inputHeaders));
+      const headers = { headers: inputHeaders };
+
+      if ((typeof headers.headers['Content-Type'] !== 'undefined' && headers.headers['Content-Type'] === 'application/x-www-form-urlencoded')
+          || (typeof headers.headers['content-type'] !== 'undefined' && headers.headers['content-type'] === 'application/x-www-form-urlencoded')
+      ) {
+        return true;
+      }
+
+      return false;
     },
   },
   methods: {
@@ -353,9 +378,7 @@ export default {
 
       let axiosRequest = '';
 
-      if ((typeof headers.headers['Content-Type'] !== 'undefined' && headers.headers['Content-Type'] === 'application/x-www-form-urlencoded')
-          || (typeof headers.headers['content-type'] !== 'undefined' && headers.headers['content-type'] === 'application/x-www-form-urlencoded')
-      ) {
+      if (this.isFormUrlEncoded) {
         const params = new URLSearchParams();
         Object.keys(data).map((key) => {
           params.append(key, data[key]);
