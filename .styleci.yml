@@ -1,4 +1,13 @@
-preset: laravel
-
-disabled:
-  - single_class_element_per_statement
+php:
+  preset: laravel
+  disabled:
+    - no_unused_imports
+  finder:
+    not-name:
+      - index.php
+      - server.php
+js:
+  finder:
+    not-name:
+      - webpack.mix.js
+css: true

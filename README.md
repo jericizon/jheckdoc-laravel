@@ -1,140 +1,61 @@
-<p align="center"><a href="https://github.com/jericizon/jheckdoc-laravel" target="_blank" rel="noopener noreferrer"><img width="150" src="https://github.com/jericizon/jheckdoc-laravel/blob/master/assets/logo/jheckdoc-logo.jpg" alt="JheckDoc Laravel logo"></a></p>
-
-<h2 align="center">Jheckdoc laravel</h2>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
-    <a href="https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs" target="_blank"><img src="https://img.shields.io/apm/l/atomic-design-ui.svg?" alt="MIT License"></a>
-    <a href="#" target="_blank"><img src="https://img.shields.io/github/last-commit/google/skia.svg?style=flat" alt="GitHub last commit"></a>
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## About Laravel
 
-<p align="center">Simple laravel api document generator</p>
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-<br>
-<br>
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-<p align="center"><img width="800" src="https://github.com/jericizon/jheckdoc-laravel/blob/master/assets/jheckdoc-preview.jpg" alt="Dashboard preview"></p>
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Installation
+## Learning Laravel
 
-You can install the package via composer
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-```bash
-composer require jheckdoc/jheckdoc-laravel
-```
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Usage
+## Laravel Sponsors
 
-Generate json file
-``` php
-// Usage description here
-php artisan jheckdoc:generate
-```
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Parameters
+### Premium Partners
 
-| Name                  |  Type  |  Description |
-| --------------------- | ------ |--------------|
-| `@jheckdocInfo`       | String | TThis is required for details of api documentation. [Sample header](annotations/ApiInformation.php) |
-| `@jheckdoc`           | String | This is required to add on top of each codeblocks. [Sample annotation](annotations/BasicAnnotation.php) |
-| `method`              | String | Your desired route method, Sample `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS` |
-| `route`               | String | Your api endpoint. Note: no need to put the full url |
-| `name`                | String | Enter desired name for your endpoint |
-| `description`         | String | Description of your endpoint |
-| `headers`             | Object | For custom headers |
-| `params`              | Object | Enter parameters for your endpoint |
-| `responses`           | Object | Server responses |
-
-
-### Api documentation detail information
-
-```
-/*@jheckdocInfo
-{
-    "version": "1.0.0",
-    "title":"Jheckdoc API",
-    "description" : "Sample description of api",
-    "contact" : "hello@jheckdoc.com",
-    "servers": [
-        {
-            "url" : "https://jheckdoc.com",
-            "description": "Production api server"
-        },
-        {
-            "url" : "https://dev.jheckdoc.com",
-            "description": "Development api server"
-        }
-    ]
-}
-*/
-```
-
-### Sample annotation
-
-Each code block requires a valid json format.
-Please see [Sample annotations](annotations) for more.
-
-```
-/*@jheckdoc
-    {
-        "method" : "POST",
-        "route" : "/v1/users/login",
-        "name":"User login",
-        "description": "Login to get authorization token.",
-        "group":"user",
-        "headers":{
-            "Content-Type": {
-                "required": true,
-                "value":"application/x-www-form-urlencoded"
-            }
-        },
-        "params" : {
-            "email" :{
-                "type":"string",
-                "description": "Enter E-mail address",
-                "required" : true
-            },
-            "password" :{
-                "type":"string",
-                "description": "Enter Password",
-                "required" : true
-            }
-        },
-        "responses": {
-            "200": {
-                "description": "Success"
-            },
-            "401": {
-                "description": "Unauthenticated"
-            }
-        }
-    }
-*/
-```
-
-### Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Cubet Techno Labs](https://cubettech.com)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[Many](https://www.many.co.uk)**
+- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
+- **[DevSquad](https://devsquad.com)**
+- **[OP.GG](https://op.gg)**
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-### Security
+## Code of Conduct
 
-If you discover any security related issues, pelase use [issue tracker](../../issues).
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Credits
+## Security Vulnerabilities
 
-- [Jeric Izon](https://github.com/jheckdoc)
-- [All Contributors](../../contributors)
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-Copyright (c) 2020, Jeric
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
