@@ -1,3 +1,5 @@
 *
 !public/
+!jheckdoc
+!jheckdoc/api-docs.json
 !.gitignore
