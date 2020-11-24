@@ -15,6 +15,10 @@
 
 <p align="center"><img width="800" src="https://github.com/jericizon/jheckdoc-laravel/blob/master/assets/jheckdoc-preview.jpg" alt="Dashboard preview"></p>
 
+## Demo page:
+
+https://jheckdoc-laravel-demo.herokuapp.com/api/documentation
+
 ## Installation
 
 You can install the package via composer
