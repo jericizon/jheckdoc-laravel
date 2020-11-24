@@ -26,9 +26,14 @@ composer require jheckdoc/jheckdoc-laravel
 ## Usage
 
 Generate json file
-``` php
-// Usage description here
+```bash
 php artisan jheckdoc:generate
+```
+
+### Publish config files
+
+```bash
+$ php artisan vendor:publish --tag=bugphix-config
 ```
 
 ### Parameters
@@ -46,9 +51,9 @@ php artisan jheckdoc:generate
 | `responses`           | Object | Server responses |
 
 
-### Api documentation detail information
+### Api documentation detail information (required)
 
-```
+```bash
 /*@jheckdocInfo
 {
     "version": "1.0.0",
@@ -74,7 +79,7 @@ php artisan jheckdoc:generate
 Each code block requires a valid json format.
 Please see [Sample annotations](annotations) for more.
 
-```
+```bash
 /*@jheckdoc
     {
         "method" : "POST",
@@ -111,6 +116,11 @@ Please see [Sample annotations](annotations) for more.
     }
 */
 ```
+
+### View api docs (default)
+
+http://localhost:8000/api/documentation
+
 
 ### Changelog
 

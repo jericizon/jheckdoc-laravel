@@ -2,6 +2,16 @@
 
 All notable changes to `jheckdoc` will be documented in this file
 
-## 1.0.0 - 201X-XX-XX
+## v1.1.0
 
-- initial release
+* added public config in readme.md
+* change singleton facade case-sensitive
+* required @jheckdocInfo info update
+* storage created new file
+* code styling
+* scroll to top on global options clicked
+* REQUEST URL with application/x-www-form-urlencoded
+
+## v1.0.0
+
+* initial release

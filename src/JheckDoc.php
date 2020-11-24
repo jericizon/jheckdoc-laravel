@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Storage;
 class JheckDoc
 {
 
-    public function version()
+    public static function version()
     {
-        return 'v1.0.0';
+        return 'v1.1.0';
     }
 
 

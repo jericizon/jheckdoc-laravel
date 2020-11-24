@@ -22,7 +22,7 @@ class JheckdocServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('jheckdoc.php'),
-            ], 'config');
+            ], 'jheckdoc-config');
 
             // Publishing the views.
             /*$this->publishes([
@@ -55,7 +55,7 @@ class JheckdocServiceProvider extends ServiceProvider
 
         // Register the main class to use with the facade
         $this->app->singleton('jheckdoc', function () {
-            return new Jheckdoc;
+            return new JheckDoc;
         });
     }
 }
