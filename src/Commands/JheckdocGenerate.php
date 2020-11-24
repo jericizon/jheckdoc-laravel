@@ -69,6 +69,8 @@ class JheckdocGenerate extends Command
         if($this->jheckdocInfoIsMissing){
             $this->comment('Warning: one of the requirement is missing [@jheckdocInfo]. https://github.com/jericizon/jheckdoc-laravel/tree/demo-page#api-documentation-detail-information');
         }
+
+        $this->line("File created: " . Storage::path( str_replace('/', DIRECTORY_SEPARATOR, $this->jsonFile)));
     }
 
     private function getFiles($dir, &$results = array())
