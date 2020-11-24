@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-class JheckDockAnnotations extends Controller
+class SampleAnnotations extends Controller
 {
 
     /*@jheckdocInfo
@@ -17,7 +17,7 @@ class JheckDockAnnotations extends Controller
         "contact" : "support@jheckdoc.com",
         "servers": [
             {
-                "url" : "https://fast-refuge-80964.herokuapp.com",
+                "url" : "https://jheckdoc-laravel-demo.herokuapp.com",
                 "description": "Demo server"
             }
         ]
