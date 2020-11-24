@@ -286,7 +286,7 @@
         </ul>
       </div>
     </header>
-    <main class="h-full overflow-y-scroll">
+    <main ref="mainWrapper" class="h-full overflow-y-scroll">
       <div class="container px-6 mx-auto grid">
 
         <GlobalOptions v-if="showGlobalOptions"></GlobalOptions>
@@ -533,6 +533,9 @@ export default {
 
           });
       }, 500);
+    },
+    showGlobalOptions(value) {
+      if (value) this.$refs.mainWrapper.scrollTop = 0;
     },
   },
 };
