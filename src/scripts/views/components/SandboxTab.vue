@@ -256,7 +256,9 @@ export default {
       return typeof this.getActiveRouteServerResponse.data !== 'undefined';
     },
     requestHtmlUrl() {
+      let requestHtmlUrl;
       let params = this.getRouteLink.split('/');
+
       params = params.map((item) => {
         if (item.includes('{') && item.includes('}')) {
           const param = item.replace('{', '').replace('}', '');
@@ -266,9 +268,9 @@ export default {
         return item;
       });
 
-      const requestHtmlUrl = params.join('/');
+      requestHtmlUrl = params.join('/');
 
-      if (this.isFormUrlEncoded) {
+      if (this.activeMethod.toLowerCase() === 'get') {
         const data = JSON.parse(JSON.stringify(this.inputParameters));
         const getParams = new URLSearchParams();
         Object.keys(data).map((key) => {
