@@ -47,7 +47,7 @@ class JheckdocGenerate extends Command
 
         $files = $this->getFiles(config('jheckdoc.controllers'));
 
-        if(!$files) return $this->error("Unable to scan files under diretory: " .config('jheckdoc.controllers') );
+        if (!$files) return $this->error("Unable to scan files under diretory: " . config('jheckdoc.controllers'));
 
         $this->createJheckDocApp();
 
@@ -66,18 +66,18 @@ class JheckdocGenerate extends Command
             ['Total', $this->total],
         ]);
 
-        if($this->jheckdocInfoIsMissing){
+        if ($this->jheckdocInfoIsMissing) {
             $this->comment('Warning: one of the requirement is missing [@jheckdocInfo]. https://github.com/jericizon/jheckdoc-laravel/tree/demo-page#api-documentation-detail-information');
         }
 
-        $this->line("File created: " . Storage::path( str_replace('/', DIRECTORY_SEPARATOR, $this->jsonFile)));
+        $this->line("File created: " . Storage::path(str_replace('/', DIRECTORY_SEPARATOR, $this->jsonFile)));
     }
 
     private function getFiles($dir, &$results = array())
     {
         $files = scandir($dir);
 
-        if(count($files) === 0) return;
+        if (count($files) === 0) return;
 
         foreach ($files as $key => $value) {
             $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
@@ -140,7 +140,7 @@ class JheckdocGenerate extends Command
                         $this->success++;
                     } catch (\Exception $e) {
                         // $this->error($e->getMessage());
-                        $error = substr(str_replace('  ', '', $line), 0 , 100);
+                        $error = substr(str_replace('  ', '', $line), 0, 100);
                         $this->error("[X] Failed to parse json: {$error}...");
                         $this->failed++;
                     }
