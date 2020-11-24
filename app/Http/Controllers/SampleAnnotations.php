@@ -78,7 +78,7 @@ class SampleAnnotations extends Controller
     /*@jheckdoc
     {
         "name":"Get user details",
-        "route" : "/users/details",
+        "route" : "/users/{email}",
         "method" : "GET",
         "description": "Get user details",
         "headers":{},
