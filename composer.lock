@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e72f4833af7120aba1e8c65c9b022b40",
+    "content-hash": "5a73cb2f7fc0d2033a3423d05e714107",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -759,16 +759,16 @@
         },
         {
             "name": "jheckdoc/jheckdoc-laravel",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jericizon/jheckdoc-laravel.git",
-                "reference": "214469c100a511ff12d6b7e75f0b457383e06756"
+                "reference": "dfd614101e0728460b42ce47357526c46806e468"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jericizon/jheckdoc-laravel/zipball/214469c100a511ff12d6b7e75f0b457383e06756",
-                "reference": "214469c100a511ff12d6b7e75f0b457383e06756",
+                "url": "https://api.github.com/repos/jericizon/jheckdoc-laravel/zipball/dfd614101e0728460b42ce47357526c46806e468",
+                "reference": "dfd614101e0728460b42ce47357526c46806e468",
                 "shasum": ""
             },
             "require": {
@@ -814,7 +814,7 @@
                 "jheckdoc-laravel",
                 "laravel"
             ],
-            "time": "2020-10-30T12:33:05+00:00"
+            "time": "2020-11-24T08:59:16+00:00"
         },
         {
             "name": "laravel/framework",
