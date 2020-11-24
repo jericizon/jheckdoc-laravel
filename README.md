@@ -33,7 +33,7 @@ php artisan jheckdoc:generate
 ### Publish config files
 
 ```bash
-$ php artisan vendor:publish --tag=bugphix-config
+$ php artisan vendor:publish --tag=jheckdoc-config
 ```
 
 ### Parameters
