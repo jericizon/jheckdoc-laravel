@@ -31,12 +31,7 @@ class SampleAnnotations extends Controller
         "route" : "/users/login",
         "method" : "POST",
         "description": "Login description",
-        "headers":{
-            "Content-Type": {
-                "required": true,
-                "value":"application/x-www-form-urlencoded"
-            }
-        },
+        "headers":{},
         "params" : {
             "email" :{
                 "type":"string",
@@ -126,12 +121,7 @@ class SampleAnnotations extends Controller
         "route" : "/register",
         "method" : "POST",
         "description": "Register description",
-        "headers":{
-            "Content-Type": {
-                "required": true,
-                "value":"application/x-www-form-urlencoded"
-            }
-        },
+        "headers":{},
         "params" : {
             "email" :{
                 "type":"string",

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SampleAnnotations;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 URL::forceScheme('https');
 
-Route::post('/users/login', 'SampleAnnotations@userLogin');
-Route::post('/users/register', 'SampleAnnotations@userRegister');
-Route::get('/users/{email}', 'SampleAnnotations@userDetails');
-
+Route::post('/users/login', [SampleAnnotations::class, 'userLogin']);
+Route::post('/users/register', [SampleAnnotations::class, 'userRegister']);
+Route::get('/users/{email}', [SampleAnnotations::class, 'userDetails']);
 
 Route::get('/', function () {
     return redirect(url(config('jheckdoc.url')));
