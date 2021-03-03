@@ -38,7 +38,7 @@
         "eslint": "^5.8.0",
         "eslint-plugin-vue": "^5.0.0",
         "postcss-loader": "^3.0.0",
-        "pug": "^2.0.3",
+        "pug": "^3.0.1",
         "pug-plain-loader": "^1.0.0",
         "sass": "^1.26.3",
         "sass-loader": "^8.0.2",
